@@ -1,14 +1,11 @@
 {
-  "name": "reddit-thron-sync",
+  "name": "tetris-online",
   "version": "1.0.0",
-  "description": "a script to download upvoted images from reddit ",
-  "main": "main.js",
+  "description": "A tetris online game",
+  "main": "./server/main.js",
   "dependencies": {
-    "request": "^2.83.0",
-    "sanitize-filename": "^1.6.1",
-    "snoowrap": "^1.14.2"
+    "ws": "^3.3.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
