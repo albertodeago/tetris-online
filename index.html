@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Tetris</title>
+        <style>
+            body {
+                display: flex;
+                background: #202020;
+                color: #f0f0f0;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-size: 2em;
+                text-align: center;
+            }
+            .player {
+                flex: 1 1 auto;
+            }
+
+            .player.local canvas {
+                border-color: #fff;
+            }
+
+            .tetris {
+                border: 0.2em solid #999;
+                height: 90vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <template id="player-template">
+            <div class="player">
+                <div class="score"></div>
+                <canvas class="tetris" width="240" height="400"></canvas>
+            </div>
+        </template>
+
+        <script src="./client/tetris-manager.js"></script>
+        <script src="./client/connection-manager.js"></script>
+        <script src="./client/arena.js"></script>
+        <script src="./client/events.js"></script>
+        <script src="./client/player.js"></script>
+        <script src="./client/tetris.js"></script>
+        <script src="./client/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "reddit-thron-sync",
+  "version": "1.0.0",
+  "description": "a script to download upvoted images from reddit ",
+  "main": "main.js",
+  "dependencies": {
+    "request": "^2.83.0",
+    "sanitize-filename": "^1.6.1",
+    "snoowrap": "^1.14.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertodeago/reddit-image-downloader.git"
+  },
+  "author": "Alberto De Agostini",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/albertodeago/reddit-image-downloader/issues"
+  },
+  "homepage": "https://github.com/albertodeago/reddit-image-downloader#readme"
+}
