@@ -6,13 +6,13 @@ const Client = require('./client');
 
 // const INDEX = './test.html';
 const PORT = /*process.env.PORT ||*/ 3000;
-const INDEX = path.join(__dirname, './index.html');
+const INDEX = path.join(__dirname, '../index.html');
 
 const httpServer = express()
     .use((req, res) => res.sendFile(INDEX) )
     .listen(PORT, () => console.log('Listening on ' + PORT));
 
-const server = new WebSocketServer({ httpServer });
+const server = new WebSocketServer({ server: httpServer });
 
 const sessions = new Map;
 

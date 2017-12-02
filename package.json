@@ -4,13 +4,12 @@
   "description": "A tetris online game",
   "main": "./server/main.js",
   "dependencies": {
-    "bufferutil": "^3.0.3",
-    "express": "^4.16.2",
-    "http": "0.0.0",
-    "utf-8-validate": "^3.0.4",
-    "ws": "^3.3.2"
+    "express": "4.13.4",
+    "utf-8-validate": "1.2.1",
+    "ws": "1.1.0"
   },
   "scripts": {
+    "start": "node ./server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,9 +17,5 @@
     "url": "git+https://github.com/albertodeago/reddit-image-downloader.git"
   },
   "author": "Alberto De Agostini",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/albertodeago/reddit-image-downloader/issues"
-  },
-  "homepage": "https://github.com/albertodeago/reddit-image-downloader#readme"
+  "license": "MIT"
 }
