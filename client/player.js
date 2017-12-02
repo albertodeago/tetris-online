@@ -20,6 +20,8 @@ class Player {
         this.tetris = tetris;
         this.arena = tetris.arena;
 
+        this.gameOver = false;
+
         this.reset();
     }
     
@@ -39,7 +41,7 @@ class Player {
     }
 
     /**
-     * Reset the player piece because the prevrious piece has collided somewhere.
+     * Reset the player piece because the previous piece has collided somewhere.
      * We re-create a piece randomly and position in the top center
      */
     reset() {
@@ -49,9 +51,11 @@ class Player {
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
     
         if(this.arena.collide(this)) {  
-            this.arena.clear();     // game over TODO -> we should not reset the player, should lose forever
-            this.score = 0;
-            this.events.emit('score', this.score);
+            // game over TODO -> we should not reset the player, should lose forever
+            this.gameOver = true;
+            // this.arena.clear();     
+            // this.score = 0;
+            // this.events.emit('score', this.score);
         }
 
         this.events.emit('pos', this.pos);

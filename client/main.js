@@ -15,31 +15,33 @@ const keyListener = e => {
     ].forEach( (key, index) => {
         const player = localTetris.player;
         const arena = localTetris.arena;
-        if( e.type === 'keydown') {
-            if(e.keyCode === key[0]) { 
-                player.move(-1);
+        if(!player.gameOver) { 
+            if( e.type === 'keydown') {
+                if(e.keyCode === key[0]) { 
+                    player.move(-1);
+                }
+                else if(e.keyCode === key[1]) { 
+                    player.move(+1);
+                }
+                else if(e.keyCode === key[2]) {
+                    player.rotate(-1);
+                }
+                else if(e.keyCode === key[3]) {
+                    player.rotate(+1);
+                }
+                else if(e.keyCode === key[5]) {
+                    while(!player.drop()) { }
+                }
             }
-            else if(e.keyCode === key[1]) { 
-                player.move(+1);
+            
+            if(e.keyCode === key[4]) {
+                if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
+                    player.drop();
+                    player.dropInterval = player.DROP_FAST;
+                } 
+                else 
+                    player.dropInterval = player.DROP_SLOW;
             }
-            else if(e.keyCode === key[2]) {
-                player.rotate(-1);
-            }
-            else if(e.keyCode === key[3]) {
-                player.rotate(+1);
-            }
-            else if(e.keyCode === key[5]) {
-                while(!player.drop()) { }
-            }
-        }
-        
-        if(e.keyCode === key[4]) {
-            if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
-                player.drop();
-                player.dropInterval = player.DROP_FAST;
-            } 
-            else 
-                player.dropInterval = player.DROP_SLOW;
         }
     })
 };

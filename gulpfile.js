@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 
+// files to concatenate to create the "client" bundle
 var files = [
     './client/tetris-manager.js', 
     './client/connection-manager.js', 
@@ -10,7 +11,7 @@ var files = [
     './client/tetris.js', 
     './client/main.js', 
 ];
-gulp.task('bundle', function() {
+gulp.task('bundle', () => {
   return gulp.src(files)
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest('./server/dist/'));

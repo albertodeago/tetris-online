@@ -22,7 +22,8 @@ class Tetris {
             const deltaTime = time - this.lastTime;
             this.lastTime = time;
     
-            this.player.update(deltaTime);
+            if(!this.player.gameOver)
+                this.player.update(deltaTime);
     
             this.draw();
             requestAnimationFrame(this._update);
