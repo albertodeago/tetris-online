@@ -5,7 +5,7 @@ localTetris.element.classList.add('local');
 localTetris.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
-connectionManager.connect('ws://192.168.1.105:9000');
+connectionManager.connect('ws://epic-tetris-online.herokuapp.com/');
 
 const keyListener = e => {
     [
