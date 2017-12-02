@@ -5,7 +5,7 @@ const Session = require('./session');
 const Client = require('./client');
 
 // const INDEX = './test.html';
-const PORT = /*process.env.PORT ||*/ 3000;
+const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, '../index.html');
 
 const httpServer = express()
