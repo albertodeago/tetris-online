@@ -54,6 +54,12 @@ class ConnectionManager {
                 });
             });
         });
+        player.events.listen('start-game', (val) => {
+            this.send({
+                type: 'start-game',
+                fragment: 'game'
+            });
+        });
 
         const arena = local.arena;
     
@@ -127,6 +133,9 @@ class ConnectionManager {
             this.updateManager(data.peers);
         } else if(data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.entry);
+        } else if(data.type === 'start-game') {
+            if(!this.localTetris.isStarted)
+                this.localTetris.run();
         }
     }
 

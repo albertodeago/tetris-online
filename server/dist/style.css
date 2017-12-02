@@ -11,6 +11,8 @@ body {
 .players-wrapper {
     display: flex;
     flex-flow: row wrap;
+    width: 100%;
+    height: 100%;
     /* height: 100vh;
     width: 100vw; */
 }

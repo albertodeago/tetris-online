@@ -70,7 +70,7 @@ server.on('connection', conn => {
     const client = createClient(conn);
 
     conn.on('message', msg => {
-        console.log('Message received', msg);
+        // console.log('Message received', msg);
         const data = JSON.parse(msg);
 
         if(data.type === 'create-session') {
@@ -93,9 +93,8 @@ server.on('connection', conn => {
             const [prop, value] = data.entry;
             client.state[data.fragment][prop] = value;
             client.broadcast(data);
-        } else if(data.type === 'player-lost') {
-            const [prop, value] = data.entry;
-            client.state[data.fragment][prop] = value;
+        } else if(data.type === 'start-game') {
+            // we simply send the message to every player
             client.broadcast(data);
         }
     })

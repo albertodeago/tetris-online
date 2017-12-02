@@ -2,7 +2,7 @@ const tetrisManager = new TetrisManager(document);
 
 const localTetris = tetrisManager.createPlayer();
 localTetris.element.classList.add('local');
-localTetris.run();
+// localTetris.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
 var HOST = location.origin.replace(/^http/, 'ws')
@@ -48,3 +48,12 @@ const keyListener = e => {
 
 document.addEventListener('keydown', keyListener); 
 document.addEventListener('keyup', keyListener);
+
+function startGame() {
+    // send a message to other players to start the game
+    localTetris.player.events.emit('start-game');
+
+    // start also the local game
+    if(!localTetris.isStarted)
+        localTetris.run();
+}

@@ -16,6 +16,8 @@ class Tetris {
         this.colors = [
             null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
         ];
+
+        this.isStarted = false;
         
         this.lastTime = 0;        
         this._update = (time = 0) => {
@@ -52,6 +54,7 @@ class Tetris {
     }
 
     run() {
+        this.isStarted = true;
         this._update();
     }
 

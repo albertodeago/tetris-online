@@ -107,6 +107,12 @@ class ConnectionManager {
                 });
             });
         });
+        player.events.listen('start-game', (val) => {
+            this.send({
+                type: 'start-game',
+                fragment: 'game'
+            });
+        });
 
         const arena = local.arena;
     
@@ -180,6 +186,9 @@ class ConnectionManager {
             this.updateManager(data.peers);
         } else if(data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.entry);
+        } else if(data.type === 'start-game') {
+            if(!this.localTetris.isStarted)
+                this.localTetris.run();
         }
     }
 
@@ -500,6 +509,8 @@ class Tetris {
         this.colors = [
             null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
         ];
+
+        this.isStarted = false;
         
         this.lastTime = 0;        
         this._update = (time = 0) => {
@@ -536,6 +547,7 @@ class Tetris {
     }
 
     run() {
+        this.isStarted = true;
         this._update();
     }
 
@@ -572,7 +584,7 @@ const tetrisManager = new TetrisManager(document);
 
 const localTetris = tetrisManager.createPlayer();
 localTetris.element.classList.add('local');
-localTetris.run();
+// localTetris.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
 var HOST = location.origin.replace(/^http/, 'ws')
@@ -618,3 +630,11 @@ const keyListener = e => {
 
 document.addEventListener('keydown', keyListener); 
 document.addEventListener('keyup', keyListener);
+
+function startGame() {
+    // send a message to other players to start the game
+    localTetris.player.events.emit('start-game');
+
+    // start also the local game
+    localTetris.run();
+}
