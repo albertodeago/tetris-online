@@ -160,6 +160,9 @@ class ConnectionManager {
     }
     
 }
+/**
+ * The arena is the field a player is playing in, basically is a big matrix 
+ */
 class Arena {
     constructor(w, h) {
         const matrix = [];
@@ -171,6 +174,10 @@ class Arena {
         this.events = new Events;
     }
 
+    /**
+     * Check if the plyer piece collides with something in the arena.
+     * @param {Player} player 
+     */
     collide(player) {
         const [m, o] = [player.matrix, player.pos];
         for(let y=0; y<m.length; ++y) {
@@ -183,6 +190,11 @@ class Arena {
         return false;
     }
 
+    /**
+     * Merge the player piece with the arena. Basically is the method that "immobilize" 
+     * pieces that collides with the arena
+     * @param {Player} player 
+     */
     merge(player) {
         player.matrix.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -195,6 +207,11 @@ class Arena {
         this.events.emit('matrix', this.matrix);
     }
 
+    /**
+     * Method that checks if there are full rows in the arena and erase them. 
+     * It returns a score based on the amount of rows erased.
+     * @returns {Integer} the score obtained by the sweep
+     */
     sweep() {
         let rowCount = 1;
         let score = 0;
@@ -218,8 +235,11 @@ class Arena {
         return score;
     }
 
+    /**
+     * Clear the arena, game is over!
+     */
     clear() {
-        this.matrix.forEach( row => { row.fill(0); });    // game ended
+        this.matrix.forEach( row => { row.fill(0); });
         this.events.emit('matrix', this.matrix);
     }
 }
@@ -243,6 +263,11 @@ class Events {
         })
     }
 }
+/**
+ * A player. This includes the matrix (piece) the player is moving, the tetris 
+ * he is playing on, the arena he is playing on, the speed of the game and 
+ * so on
+ */
 class Player {
     constructor(tetris){
         
@@ -263,6 +288,11 @@ class Player {
         this.reset();
     }
     
+    /**
+     * Move a piece left or right
+     * @param {Integer} dir +1 | -1 to move the player piece to the right
+     * or to the left
+     */
     move(dir) {
         this.pos.x += dir;
         if(this.arena.collide(this)) {
@@ -273,14 +303,18 @@ class Player {
         this.events.emit('pos', this.pos);
     }
 
+    /**
+     * Reset the player piece because the prevrious piece has collided somewhere.
+     * We re-create a piece randomly and position in the top center
+     */
     reset() {
         const pieces = 'ILJOTSZ';
         this.matrix = this.createPiece(pieces[pieces.length * Math.random() | 0]);
         this.pos.y = 0;
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
     
-        if(this.arena.collide(this)) {
-            this.arena.clear();
+        if(this.arena.collide(this)) {  
+            this.arena.clear();     // game over TODO -> we should not reset the player, should lose forever
             this.score = 0;
             this.events.emit('score', this.score);
         }
@@ -289,6 +323,12 @@ class Player {
         this.events.emit('matrix', this.matrix);
     }
 
+    /**
+     * Rotate the piece of the player to the right or to the left based on dir input.
+     * If the player could not rotate the piece due to collision we move left or right
+     *  the piece to let it fit rotated.
+     * @param {Integer} dir +1 | -1
+     */
     rotate(dir) {
         const initialPos = this.pos.x;
         let offset = 1;
@@ -306,6 +346,11 @@ class Player {
         this.events.emit('matrix', this.matrix);       
     }
 
+    /**
+     * Drop the player piece down by 1. If the piece collide we merge it with the arena
+     * and call the reset method. Also if it collides we call an arena sweep and 
+     * update the score.
+     */
     drop() {
         this.pos.y++;
         this.dropCounter = 0;
@@ -315,7 +360,7 @@ class Player {
             this.reset();
             this.score += this.arena.sweep();
             this.events.emit('score', this.score);
-            return true;    // return true when we collide
+            return true;    // return true when we collide (used to implement the space btn)
         }
         
         this.events.emit('pos', this.pos);
@@ -328,6 +373,11 @@ class Player {
         }
     }
 
+    /**
+     * Generic method to rotate a matrix, used to rotate pieces
+     * @param {Array[Array[]]} matrix 
+     * @param {Integer} dir +1 | -1 based on wanted rotation
+     */
     _rotateMatrix(matrix, dir) {
         for(let y=0; y<matrix.length; ++y) {
             for(let x=0; x<y; ++x) {
@@ -347,6 +397,11 @@ class Player {
             matrix.reverse();
     }
 
+    /**
+     * TODO should implement a new class PieceType and make pieces there.
+     * Create a piece of type and return it.
+     * @param {String} type 
+     */
     createPiece(type) {
         if(type === 'T') {
             return [
@@ -487,7 +542,6 @@ connectionManager.connect(HOST);
 
 const keyListener = e => {
     [
-        [65, 68, 81, 87, 83, 32],   // a    d     q w  s    space
         [37, 39, 81, 38, 40, 32]    // left right q up down space
     ].forEach( (key, index) => {
         const player = localTetris.player;
@@ -506,9 +560,7 @@ const keyListener = e => {
                 player.rotate(+1);
             }
             else if(e.keyCode === key[5]) {
-                while(!player.drop()){
-                    player;
-                }
+                while(!player.drop()) { }
             }
         }
         

@@ -29,10 +29,7 @@ const keyListener = e => {
                 player.rotate(+1);
             }
             else if(e.keyCode === key[5]) {
-                console;
-                while(!player.drop()){
-                    
-                }
+                while(!player.drop()) { }
             }
         }
         
