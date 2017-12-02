@@ -315,7 +315,7 @@ class Player {
             this.reset();
             this.score += this.arena.sweep();
             this.events.emit('score', this.score);
-            return ;
+            return true;    // return true when we collide
         }
         
         this.events.emit('pos', this.pos);
@@ -487,10 +487,11 @@ connectionManager.connect(HOST);
 
 const keyListener = e => {
     [
-        [65, 68, 81, 87, 83],   // a    d     q w  s
-        [37, 39, 81, 38, 40]    // left right q up down
+        [65, 68, 81, 87, 83, 32],   // a    d     q w  s    space
+        [37, 39, 81, 38, 40, 32]    // left right q up down space
     ].forEach( (key, index) => {
         const player = localTetris.player;
+        const arena = localTetris.arena;
         if( e.type === 'keydown') {
             if(e.keyCode === key[0]) { 
                 player.move(-1);
@@ -504,6 +505,11 @@ const keyListener = e => {
             else if(e.keyCode === key[3]) {
                 player.rotate(+1);
             }
+            else if(e.keyCode === key[5]) {
+                while(!player.drop()){
+                    player;
+                }
+            }
         }
         
         if(e.keyCode === key[4]) {
@@ -514,7 +520,6 @@ const keyListener = e => {
             else 
                 player.dropInterval = player.DROP_SLOW;
         }
-        // TODO add space event
     })
 };
 

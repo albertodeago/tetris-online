@@ -1,3 +1,6 @@
+/**
+ * The arena is the field a player is playing in, basically is a big matrix 
+ */
 class Arena {
     constructor(w, h) {
         const matrix = [];
@@ -9,6 +12,10 @@ class Arena {
         this.events = new Events;
     }
 
+    /**
+     * Check if the plyer piece collides with something in the arena.
+     * @param {Player} player 
+     */
     collide(player) {
         const [m, o] = [player.matrix, player.pos];
         for(let y=0; y<m.length; ++y) {
@@ -21,6 +28,11 @@ class Arena {
         return false;
     }
 
+    /**
+     * Merge the player piece with the arena. Basically is the method that "immobilize" 
+     * pieces that collides with the arena
+     * @param {Player} player 
+     */
     merge(player) {
         player.matrix.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -33,6 +45,11 @@ class Arena {
         this.events.emit('matrix', this.matrix);
     }
 
+    /**
+     * Method that checks if there are full rows in the arena and erase them. 
+     * It returns a score based on the amount of rows erased.
+     * @returns {Integer} the score obtained by the sweep
+     */
     sweep() {
         let rowCount = 1;
         let score = 0;
@@ -56,8 +73,11 @@ class Arena {
         return score;
     }
 
+    /**
+     * Clear the arena, game is over!
+     */
     clear() {
-        this.matrix.forEach( row => { row.fill(0); });    // game ended
+        this.matrix.forEach( row => { row.fill(0); });
         this.events.emit('matrix', this.matrix);
     }
 }

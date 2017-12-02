@@ -11,10 +11,10 @@ connectionManager.connect(HOST);
 
 const keyListener = e => {
     [
-        [65, 68, 81, 87, 83],   // a    d     q w  s
-        [37, 39, 81, 38, 40]    // left right q up down
+        [37, 39, 81, 38, 40, 32]    // left right q up down space
     ].forEach( (key, index) => {
         const player = localTetris.player;
+        const arena = localTetris.arena;
         if( e.type === 'keydown') {
             if(e.keyCode === key[0]) { 
                 player.move(-1);
@@ -28,6 +28,12 @@ const keyListener = e => {
             else if(e.keyCode === key[3]) {
                 player.rotate(+1);
             }
+            else if(e.keyCode === key[5]) {
+                console;
+                while(!player.drop()){
+                    
+                }
+            }
         }
         
         if(e.keyCode === key[4]) {
@@ -38,7 +44,6 @@ const keyListener = e => {
             else 
                 player.dropInterval = player.DROP_SLOW;
         }
-        // TODO add space event
     })
 };
 
