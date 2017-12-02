@@ -4,12 +4,13 @@ const path = require('path');
 const Session = require('./session');
 const Client = require('./client');
 
-// const INDEX = './test.html';
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, '../index.html');
+const BUNDLE = path.join(__dirname + '/dist/bundle.js');
 
 const httpServer = express()
-    .use((req, res) => res.sendFile(INDEX) )
+    .use('/index.html', (req, res) => res.sendFile(INDEX))
+    .use('/dist/bundle.js', (req, res) => res.sendFile(BUNDLE))
     .listen(PORT, () => console.log('Listening on ' + PORT));
 
 const server = new WebSocketServer({ server: httpServer });

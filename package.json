@@ -5,6 +5,7 @@
   "main": "./server/main.js",
   "dependencies": {
     "express": "4.13.4",
+    "gulp": "^3.9.1",
     "utf-8-validate": "1.2.1",
     "ws": "1.1.0"
   },
@@ -17,5 +18,8 @@
     "url": "git+https://github.com/albertodeago/reddit-image-downloader.git"
   },
   "author": "Alberto De Agostini",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-concat": "^2.6.1"
+  }
 }
