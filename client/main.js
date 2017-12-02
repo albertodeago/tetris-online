@@ -49,7 +49,7 @@ const keyListener = e => {
 document.addEventListener('keydown', keyListener); 
 document.addEventListener('keyup', keyListener);
 
-function startGame() {
+function startGame() {    
     // send a message to other players to start the game
     localTetris.player.events.emit('start-game');
 

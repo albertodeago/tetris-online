@@ -54,8 +54,26 @@ class Tetris {
     }
 
     run() {
-        this.isStarted = true;
-        this._update();
+        document.getElementById('waiting-game').style.display = "block";
+        document.getElementById('start-game-btn').style.display = "none";
+        const maxTime = 5;
+        const secondsToWait = [1,2,3,4,5];
+        this.showRemainingTime(5);
+        secondsToWait.forEach( (time, index) => {
+            setTimeout(() => {
+                if(maxTime !== time) 
+                    this.showRemainingTime(maxTime - time);
+                else {
+                    document.getElementById('start-game-container').style.display = "none";
+                    this.isStarted = true;
+                    this._update();
+                }
+            }, time*1000);
+        })
+    }
+
+    showRemainingTime(time) {
+        document.getElementById('waiting-game').innerText = "Starting in " + time;
     }
 
     /**

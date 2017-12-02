@@ -83,7 +83,15 @@ server.on('connection', conn => {
                 id: session.id
             });
         } else if(data.type === 'join-session') {
-            const session = getSession(data.id) || createSession(data.id);
+            let session = getSession(data.id);
+            // if the session is not existend we create new one with tht id
+            if(!session) {  
+                session = createSession(data.id);
+                client.send({
+                    type: 'session-created', 
+                    id: session.id
+                });
+            }
             session.join(client);
 
             client.state = data.state;

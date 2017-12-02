@@ -1,5 +1,6 @@
 
 body {
+    position:relative;
     display: flex;
     background: #202020;
     color: #f0f0f0;
@@ -8,6 +9,34 @@ body {
     text-align: center;
 }
 
+/******************* START GAME *****************/
+.modal-bkg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.75);
+}
+.start-game-btn {
+    display: none;
+    position: absolute;
+    top: calc(50% - 40px);
+    left: calc(50% - 130px);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+.waiting-game {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: calc(50% - 200px);
+}
+/************************************************/
+
+
+/********************** PLAYERS *****************/
 .players-wrapper {
     display: flex;
     flex-flow: row wrap;
@@ -42,3 +71,4 @@ body {
 .game-over {
     opacity: 0.3;
 }
+/*****************************************************/

@@ -182,6 +182,8 @@ class ConnectionManager {
         const data = JSON.parse(msg);
         if(data.type === 'session-created') {
             window.location.hash = data.id;
+            document.getElementById('start-game-btn').style.display = "block";
+            document.getElementById('waiting-game').style.display = "none";
         } else if(data.type === 'session-broadcast') {
             this.updateManager(data.peers);
         } else if(data.type === 'state-update') {
@@ -547,8 +549,26 @@ class Tetris {
     }
 
     run() {
-        this.isStarted = true;
-        this._update();
+        document.getElementById('waiting-game').style.display = "block";
+        document.getElementById('start-game-btn').style.display = "none";
+        const maxTime = 5;
+        const secondsToWait = [1,2,3,4,5];
+        this.showRemainingTime(5);
+        secondsToWait.forEach( (time, index) => {
+            setTimeout(() => {
+                if(maxTime !== time) 
+                    this.showRemainingTime(maxTime - time);
+                else {
+                    document.getElementById('start-game-container').style.display = "none";
+                    this.isStarted = true;
+                    this._update();
+                }
+            }, time*1000);
+        })
+    }
+
+    showRemainingTime(time) {
+        document.getElementById('waiting-game').innerText = "Starting in " + time;
     }
 
     /**
@@ -631,10 +651,11 @@ const keyListener = e => {
 document.addEventListener('keydown', keyListener); 
 document.addEventListener('keyup', keyListener);
 
-function startGame() {
+function startGame() {    
     // send a message to other players to start the game
     localTetris.player.events.emit('start-game');
 
     // start also the local game
-    localTetris.run();
+    if(!localTetris.isStarted)
+        localTetris.run();
 }

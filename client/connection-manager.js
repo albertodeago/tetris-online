@@ -129,6 +129,8 @@ class ConnectionManager {
         const data = JSON.parse(msg);
         if(data.type === 'session-created') {
             window.location.hash = data.id;
+            document.getElementById('start-game-btn').style.display = "block";
+            document.getElementById('waiting-game').style.display = "none";
         } else if(data.type === 'session-broadcast') {
             this.updateManager(data.peers);
         } else if(data.type === 'state-update') {
