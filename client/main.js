@@ -7,7 +7,7 @@ localTetris.run();
 const connectionManager = new ConnectionManager(tetrisManager);
 var HOST = location.origin.replace(/^http/, 'ws')
 console.log("connecting to ", HOST);
-connectionManager.connect('ws://' + window.location.hostname + ':9000');
+connectionManager.connect(HOST);
 
 const keyListener = e => {
     [

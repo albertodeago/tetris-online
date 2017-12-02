@@ -1,28 +1,18 @@
-// const express = require('express');
-// const http = require('http');
+const express = require('express');
 const WebSocketServer = require('ws').Server;
+const path = require('path');
 const Session = require('./session');
 const Client = require('./client');
 
 // const INDEX = './test.html';
-const PORT = 9000;
-// const app = express()
-//     .use((req, res) => res.sendFile(INDEX) )
-    
-// const verifyClient = (info) => {
-//     console.log('Verify client')
-//     return true
-// }
+const PORT = /*process.env.PORT ||*/ 3000;
+const INDEX = path.join(__dirname, './index.html');
 
-// const httpServer = http.createServer(app);
-// const server = new WebSocketServer({port: PORT});
-const server = new WebSocketServer({ port: PORT });
-// const server = new WebSocketServer('ws://epic-tetris-online.herokuapp.com:9000');
+const httpServer = express()
+    .use((req, res) => res.sendFile(INDEX) )
+    .listen(PORT, () => console.log('Listening on ' + PORT));
 
-
-// httpServer.listen(PORT+1, function listening() {
-//     console.log('Listening on %d', httpServer.address().port);
-// });
+const server = new WebSocketServer({ server });
 
 const sessions = new Map;
 
