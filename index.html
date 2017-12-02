@@ -2,39 +2,21 @@
 <html>
     <head>
         <title>Tetris</title>
-        <style>
-            body {
-                display: flex;
-                background: #202020;
-                color: #f0f0f0;
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-                font-size: 2em;
-                text-align: center;
-            }
-            .player {
-                flex: 1 1 auto;
-            }
-
-            .player.local canvas {
-                border-color: #fff;
-            }
-
-            .tetris {
-                border: 0.2em solid #999;
-                height: 90vh;
-            }
-        </style>
+        <link href="/dist/style.css" rel="stylesheet">
     </head>
 
     <body>
-        <template id="player-template">
-            <div class="player">
-                <div class="score"></div>
-                <canvas class="tetris" width="240" height="400"></canvas>
-            </div>
-        </template>
+        <div id="players-wrapper" class="players-wrapper">
+        
+            <template id="player-template">
+                <div class="player">
+                    <div class="score"></div>
+                    <canvas class="tetris" width="240" height="400"></canvas>
+                </div>
+            </template>
 
+        </div>
+        
         <script type="text/javascript" src="/dist/bundle.js"></script>
-
     </body>
 </html>
