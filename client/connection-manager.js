@@ -45,7 +45,7 @@ class ConnectionManager {
 
         const player = local.player;
 
-        ['pos', 'score', 'matrix'].forEach( prop => {
+        ['pos', 'score', 'matrix', 'gameOver'].forEach( prop => {
             player.events.listen(prop, value => {
                 this.send({
                     type: 'state-update',
@@ -74,7 +74,7 @@ class ConnectionManager {
         const clients = peers.clients.filter(client => me !== client.id);
         clients.forEach( client => {
             if(!this.peers.has(client.id)) {
-                const tetris = this.tetrisManager.createPlayer();
+                const tetris = this.tetrisManager.createPlayer(client.id);
                 tetris.unserialize(client.state);
                 this.peers.set(client.id, tetris);
             }
@@ -87,8 +87,11 @@ class ConnectionManager {
             }
         });
 
-        const sorted = peers.clients.map(client => this.peers.get(client.id) || this.localTetris);
-        this.tetrisManager.sortPlayers(sorted);
+        // const sorted = peers.clients.map(client => this.peers.get(client.id) || this.localTetris); // with this line we "syncronize" all clients to have the same order of tetris appended
+        // this.tetrisManager.sortPlayers(sorted);
+
+        // set id of the html element if not already setted
+        this.tetrisManager.setIdToTetris(this.localTetris, me); 
     }
 
     updatePeer(id, fragment, [prop, value]) {
@@ -105,8 +108,17 @@ class ConnectionManager {
         } else {
             tetris.draw();
         }
+
+        if(tetris.player.gameOver === true) {
+            let el = document.getElementById(id);
+            el.classList.add('game-over');
+        }
     }
 
+    /**
+     * Received a message from the server, handle it
+     * @param {Object} msg  TODO should create a Message class and a hierarchy
+     */
     receive(msg) {
         const data = JSON.parse(msg);
         if(data.type === 'session-created') {

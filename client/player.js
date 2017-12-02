@@ -51,11 +51,11 @@ class Player {
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
     
         if(this.arena.collide(this)) {  
-            // game over TODO -> we should not reset the player, should lose forever
             this.gameOver = true;
-            // this.arena.clear();     
-            // this.score = 0;
-            // this.events.emit('score', this.score);
+            this.events.emit('gameOver', true);
+
+            // update self tetris view
+            this.tetris.element.classList.add('game-over');
         }
 
         this.events.emit('pos', this.pos);

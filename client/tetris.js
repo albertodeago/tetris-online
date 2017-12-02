@@ -55,15 +55,19 @@ class Tetris {
         this._update();
     }
 
+    /**
+     * Serialize objects to send throught websocket
+     */
     serialize() {
         return {
             arena: {
                 matrix: this.arena.matrix,
             },
             player: {
-                matrix: this.player.matrix,
-                pos:    this.player.pos,
-                score:  this.player.score
+                matrix:     this.player.matrix,
+                pos:        this.player.pos,
+                score:      this.player.score,
+                gameOver:   this.player.gameOver
             }
         }
     }

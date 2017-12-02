@@ -6,10 +6,12 @@ const Client = require('./client');
 
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, '../index.html');
+const STYLE = path.join(__dirname, '../style.css');
 const BUNDLE = path.join(__dirname + '/dist/bundle.js');
 
 const httpServer = express()
     .use('/index.html', (req, res) => res.sendFile(INDEX))
+    .use('/dist/style.css', (req, res) => res.sendFile(STYLE))
     .use('/dist/bundle.js', (req, res) => res.sendFile(BUNDLE))
     .listen(PORT, () => console.log('Listening on ' + PORT));
 
@@ -88,6 +90,10 @@ server.on('connection', conn => {
 
             broadcastSession(session);
         } else if(data.type === 'state-update') {
+            const [prop, value] = data.entry;
+            client.state[data.fragment][prop] = value;
+            client.broadcast(data);
+        } else if(data.type === 'player-lost') {
             const [prop, value] = data.entry;
             client.state[data.fragment][prop] = value;
             client.broadcast(data);
