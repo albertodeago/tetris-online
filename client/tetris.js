@@ -4,7 +4,7 @@ class Tetris {
         this.element = element;
         this.canvas = element.querySelector('.tetris');;
         this.context = this.canvas.getContext('2d');
-        this.context.scale(20,20);
+        this.context.scale(30,30);
         
         this.arena = new Arena(12, 20);
         this.player = new Player(this);
@@ -19,7 +19,7 @@ class Tetris {
 
         this.isStarted = false;
         
-        this.lastTime = 0;        
+        this.lastTime = 0;
         this._update = (time = 0) => {
             const deltaTime = time - this.lastTime;
             this.lastTime = time;
@@ -34,6 +34,9 @@ class Tetris {
         this.updateScore(0);
     }
 
+    /**
+     * Draw both the arena and the player piece
+     */
     draw() {    
         this.context.fillStyle = '#000';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -42,6 +45,14 @@ class Tetris {
         this.drawMatrix(this.player.matrix, this.player.pos);
     }
 
+    /**
+     * Draw a piece or the arena in the canvas. It's an helper function 
+     * used by Draw method
+     * @param {Array[Array[]]} matrix the piece to draw
+     * @param {Object} offset an object with x and y properties that
+     * determinize the offset (with 0 0 being the top left) of the matrix
+     * to draw in the tetris
+     */
     drawMatrix(matrix, offset = {x:0,y:0} ) {
         matrix.forEach((row,y) => {
             row.forEach((value, x) => {
@@ -53,6 +64,10 @@ class Tetris {
         });
     }
 
+    /**
+     * Function called to start the tetris. We show a message that the 
+     * game is starting in 5 seconds and then actually start the tetris.
+     */
     run() {
         document.getElementById('waiting-game').style.display = "block";
         document.getElementById('start-game-btn').style.display = "none";
@@ -72,6 +87,10 @@ class Tetris {
         })
     }
 
+    /**
+     * Helper function to show the countdown before start of game
+     * @param {Integer} time number to show in the string "starting in {time}"
+     */
     showRemainingTime(time) {
         document.getElementById('waiting-game').innerText = "Starting in " + time;
     }
@@ -93,6 +112,12 @@ class Tetris {
         }
     }
 
+    /**
+     * Given a state of a tetris serialized, deserialize it and 
+     * assign the properties to the instance of tetris (this is used 
+     * when a used joins a game)
+     * @param {Object} state 
+     */
     unserialize(state) {
         this.arena = Object.assign(state.arena);
         this.player = Object.assign(state.player);
@@ -100,6 +125,10 @@ class Tetris {
         this.draw();
     }
     
+    /**
+     * Update the score view of the instance tetris
+     * @param {Integer} score 
+     */
     updateScore(score){
         this.element.querySelector('.score').innerText = score;
     }

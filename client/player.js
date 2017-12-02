@@ -6,8 +6,8 @@
 class Player {
     constructor(tetris){
         
-        this.DROP_SLOW = 1000;
-        this.DROP_FAST = 50;
+        this.DROP_SLOW = 600;
+        this.DROP_FAST = 35;
 
         this.events = new Events();
 
@@ -105,6 +105,11 @@ class Player {
         this.events.emit('pos', this.pos);
     }
 
+    /**
+     * Update the view if, from the last time is passed more than
+     * "dropInterval" ms
+     * @param {Integer} deltaTime passed time in ms
+     */
     update(deltaTime) {
         this.dropCounter += deltaTime;
         if(this.dropCounter > this.dropInterval){
