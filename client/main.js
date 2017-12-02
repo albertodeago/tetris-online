@@ -5,7 +5,9 @@ localTetris.element.classList.add('local');
 localTetris.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
-connectionManager.connect('ws://epic-tetris-online.herokuapp.com/');
+var HOST = location.origin.replace(/^http/, 'ws')
+console.log("connecting to ", HOST);
+connectionManager.connect('ws://' + window.location.hostname + ':9000');
 
 const keyListener = e => {
     [
