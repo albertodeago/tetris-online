@@ -1,0 +1,42 @@
+
+body {
+    display: flex;
+    background: #202020;
+    color: #f0f0f0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 2em;
+    text-align: center;
+}
+
+.players-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    /* height: 100vh;
+    width: 100vw; */
+}
+
+.player {
+    flex: 1 1 auto;
+    flex-shrink: 0;
+}
+
+.local {
+    flex: 1 0 500px;
+}
+
+.player.local .tetris {
+    border-color: #fff;
+}
+
+.tetris {
+    border: 0.2em solid #999;
+    height: calc(100% - 100px);
+}
+
+.score {
+    height: 50px;
+}
+
+.game-over {
+    opacity: 0.3;
+}

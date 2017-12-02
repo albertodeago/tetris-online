@@ -3,34 +3,52 @@ class TetrisManager {
     constructor(document) {
 
         this.document = document;
-        this.template = document.getElementById('player-template');
+		this.template = document.getElementById('player-template');
+		this.playersContainer = document.getElementById('players-wrapper');
 
         this.instances = new Set;
         
     }
 
-    createPlayer() {
+    /**
+     * Create a tetris instance in the page, can be the local player or 
+     * another player
+     * @param {String} clientId 
+     */
+    createPlayer(clientId) {
         const element = this.document
             .importNode(this.template.content, true)
             .children[0];
+        if(clientId)
+            element.setAttribute("id", clientId);
         
         const tetris = new Tetris(element);            
         this.instances.add(tetris);
 
-        this.document.body.appendChild(tetris.element);
+        this.playersContainer.appendChild(tetris.element);
             
         return tetris;
     }
 
     removePlayer(tetris) {
         this.instances.delete(tetris);
-        this.document.body.removeChild(tetris.element);
+        this.playersContainer.removeChild(tetris.element);
     }
     
     sortPlayers(tetri) {
         tetri.forEach(tetris => {
-            this.document.body.appendChild(tetris.element);
+            this.playersContainer.appendChild(tetris.element);
         });
+    }
+
+    /**
+     * Set the id assigned by the connection manager to the element 
+     * of the Tetris passed as parameter
+     * @param {Tetris} tetris 
+     */
+    setIdToTetris(tetris, clientId) {
+        if(!tetris.element.id)
+            tetris.element.setAttribute('id', clientId);
     }
 }
 class ConnectionManager {
@@ -80,7 +98,7 @@ class ConnectionManager {
 
         const player = local.player;
 
-        ['pos', 'score', 'matrix'].forEach( prop => {
+        ['pos', 'score', 'matrix', 'gameOver'].forEach( prop => {
             player.events.listen(prop, value => {
                 this.send({
                     type: 'state-update',
@@ -109,7 +127,7 @@ class ConnectionManager {
         const clients = peers.clients.filter(client => me !== client.id);
         clients.forEach( client => {
             if(!this.peers.has(client.id)) {
-                const tetris = this.tetrisManager.createPlayer();
+                const tetris = this.tetrisManager.createPlayer(client.id);
                 tetris.unserialize(client.state);
                 this.peers.set(client.id, tetris);
             }
@@ -122,8 +140,11 @@ class ConnectionManager {
             }
         });
 
-        const sorted = peers.clients.map(client => this.peers.get(client.id) || this.localTetris);
-        this.tetrisManager.sortPlayers(sorted);
+        // const sorted = peers.clients.map(client => this.peers.get(client.id) || this.localTetris); // with this line we "syncronize" all clients to have the same order of tetris appended
+        // this.tetrisManager.sortPlayers(sorted);
+
+        // set id of the html element if not already setted
+        this.tetrisManager.setIdToTetris(this.localTetris, me); 
     }
 
     updatePeer(id, fragment, [prop, value]) {
@@ -140,8 +161,17 @@ class ConnectionManager {
         } else {
             tetris.draw();
         }
+
+        if(tetris.player.gameOver === true) {
+            let el = document.getElementById(id);
+            el.classList.add('game-over');
+        }
     }
 
+    /**
+     * Received a message from the server, handle it
+     * @param {Object} msg  TODO should create a Message class and a hierarchy
+     */
     receive(msg) {
         const data = JSON.parse(msg);
         if(data.type === 'session-created') {
@@ -316,11 +346,11 @@ class Player {
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
     
         if(this.arena.collide(this)) {  
-            // game over TODO -> we should not reset the player, should lose forever
             this.gameOver = true;
-            // this.arena.clear();     
-            // this.score = 0;
-            // this.events.emit('score', this.score);
+            this.events.emit('gameOver', true);
+
+            // update self tetris view
+            this.tetris.element.classList.add('game-over');
         }
 
         this.events.emit('pos', this.pos);
@@ -509,15 +539,19 @@ class Tetris {
         this._update();
     }
 
+    /**
+     * Serialize objects to send throught websocket
+     */
     serialize() {
         return {
             arena: {
                 matrix: this.arena.matrix,
             },
             player: {
-                matrix: this.player.matrix,
-                pos:    this.player.pos,
-                score:  this.player.score
+                matrix:     this.player.matrix,
+                pos:        this.player.pos,
+                score:      this.player.score,
+                gameOver:   this.player.gameOver
             }
         }
     }
