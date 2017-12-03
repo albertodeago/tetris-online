@@ -8,7 +8,16 @@
     <body>
         <div id="start-game-container" class="modal-bkg">
             <div id="start-game-btn" class="start-game-btn" onclick="startGame()">Start Game</div>
-            <div id="waiting-game" class="waiting-game">Wait room owner to start the game...</div>
+            <div id="waiting-game" class="waiting-game">
+                <div id="waiting-label" class="waiting-label">Wait room owner to start the game...</div>
+                <div class="controls-panel">
+                    <div class="controls-label controls-header">This is a simple tetris multiplayer game</div>
+                    <input type="text" id="input-player-name" class="input-player-name"/>
+                    <div class="controls-label controls-text">
+                        Controls are LEFT RIGHT UP DOWN arrows and SPACEBAR to drop immediately the piece
+                    </div>
+                </div>
+            </div>
             <!-- TODO mostrare controlli -->
         </div>
 
@@ -16,6 +25,7 @@
         
             <template id="player-template">
                 <div class="player">
+                    <div class="name"></div>
                     <div class="score"></div>
                     <canvas class="tetris" width="360" height="600"></canvas>
                 </div>

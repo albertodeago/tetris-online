@@ -21,6 +21,7 @@ class Player {
         this.arena = tetris.arena;
 
         this.gameOver = false;
+        this.name = '';
 
         this.reset();
     }
@@ -115,6 +116,15 @@ class Player {
         if(this.dropCounter > this.dropInterval){
             this.drop();
         }
+    }
+
+    /**
+     * Set the name of the player and emit an event to notify the other clients
+     * @param {String} name 
+     */
+    setName(name) {
+        this.name = name;
+        this.events.emit('name', name);
     }
 
     /**

@@ -28,11 +28,36 @@ body {
     border: 2px solid white;
     cursor: pointer;
 }
+
+/***** WAITING PANEL *****/
 .waiting-game {
     position: absolute;
-    top: calc(50% - 40px);
-    left: calc(50% - 200px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
+.waiting-label {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: calc(50% - 305px);
+}
+.controls-panel {
+    background: rgba(255,255,255,0.25);
+    position: absolute;
+    top: 0;
+    left: 70%;
+    right: 0;
+    bottom: 0;
+}
+.controls-header {
+    margin-bottom: 50px;
+    font-size: 40px;
+}
+.controls-text {
+    font-size: 25px;
+}
+
 /************************************************/
 
 

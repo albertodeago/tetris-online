@@ -45,7 +45,7 @@ class ConnectionManager {
 
         const player = local.player;
 
-        ['pos', 'score', 'matrix', 'gameOver'].forEach( prop => {
+        ['pos', 'score', 'matrix', 'gameOver', 'name'].forEach( prop => {
             player.events.listen(prop, value => {
                 this.send({
                     type: 'state-update',
@@ -111,7 +111,9 @@ class ConnectionManager {
         
         if(prop === 'score') {
             tetris.updateScore(value);
-        } else {
+        } else if(prop === 'name') {
+            tetris.setPlayerName(value);
+        }else {
             tetris.draw();
         }
 

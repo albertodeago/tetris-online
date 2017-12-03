@@ -15,7 +15,7 @@ class Tetris {
 
         this.colors = [
             null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
-        ];
+        ];     
 
         this.isStarted = false;
         
@@ -71,9 +71,9 @@ class Tetris {
     run() {
         document.getElementById('waiting-game').style.display = "block";
         document.getElementById('start-game-btn').style.display = "none";
-        const maxTime = 5;
-        const secondsToWait = [1,2,3,4,5];
-        this.showRemainingTime(5);
+        const maxTime = 7;
+        const secondsToWait = [1,2,3,4,5,6,7];
+        this.showRemainingTime(maxTime);
         secondsToWait.forEach( (time, index) => {
             setTimeout(() => {
                 if(maxTime !== time) 
@@ -82,6 +82,7 @@ class Tetris {
                     document.getElementById('start-game-container').style.display = "none";
                     this.isStarted = true;
                     this._update();
+                    this.setPlayerName(document.getElementById('input-player-name').value);
                 }
             }, time*1000);
         })
@@ -92,7 +93,7 @@ class Tetris {
      * @param {Integer} time number to show in the string "starting in {time}"
      */
     showRemainingTime(time) {
-        document.getElementById('waiting-game').innerText = "Starting in " + time;
+        document.getElementById('waiting-label').innerText = "Starting in " + time;
     }
 
     /**
@@ -132,5 +133,14 @@ class Tetris {
     updateScore(score){
         this.element.querySelector('.score').innerText = score;
     }
+    
+    /**
+     * Set the name of the player or generate a random one if missing parameter
+     * @param {String} name 
+     */
+    setPlayerName(name = 'Unnamed player') {
+        this.element.querySelector('.name').innerText = name;
+        this.player.setName(name);
+    }    
 
 }
