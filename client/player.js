@@ -136,7 +136,7 @@ class Player {
      * rows he destroyed.
      */
     changeSpeed() {
-        this.DROP_SLOW -= (2 * this.amountOfBrokenRows);
+        this.DROP_SLOW -= (3 * this.amountOfBrokenRows);
     }
 
     /**

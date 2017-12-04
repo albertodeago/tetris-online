@@ -59,6 +59,15 @@ class Tetris {
                 if(value !== 0) {
                     this.context.fillStyle = this.colors[value];
                     this.context.fillRect(x+offset.x, y+offset.y, 1, 1);
+
+                    
+                    // this.context.beginPath();
+                    this.context.lineWidth="0.05";
+                    this.context.strokeStyle="#000";
+                    this.context.strokeRect(x+offset.x, y+offset.y, 1, 1); 
+                    // this.context.stroke();
+                    // this.context.strokeStyle = 'red';
+                    // this.context.strokeRect(x+offset.x, y+offset.y, 1, 1);
                 }
             });
         });
