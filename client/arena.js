@@ -51,8 +51,9 @@ class Arena {
      * @returns {Integer} the score obtained by the sweep
      */
     sweep() {
-        let rowCount = 1;
-        let score = 0;
+        let amountOfRows = 0;   // amount of rows that the sweeps has removed
+        let multiplier = 1;     // multiplier for score
+        let score = 0;          // score to return
         outer: for(let y=this.matrix.length -1; y>0; --y){
             for(let x = 0; x<this.matrix[y].length; ++x ){
                 if(this.matrix[y][x] === 0) {
@@ -65,12 +66,13 @@ class Arena {
             this.matrix.unshift(row);
             ++y;
     
-            score += rowCount * 10;
-            rowCount *= 2;
+            amountOfRows++;
+            score += multiplier * 10;
+            multiplier *= 2;
         }
         
         this.events.emit('matrix', this.matrix);
-        return score;
+        return {score: score, rows: amountOfRows};
     }
 
     /**

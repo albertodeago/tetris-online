@@ -256,8 +256,9 @@ class Arena {
      * @returns {Integer} the score obtained by the sweep
      */
     sweep() {
-        let rowCount = 1;
-        let score = 0;
+        let amountOfRows = 0;   // amount of rows that the sweeps has removed
+        let multiplier = 1;     // multiplier for score
+        let score = 0;          // score to return
         outer: for(let y=this.matrix.length -1; y>0; --y){
             for(let x = 0; x<this.matrix[y].length; ++x ){
                 if(this.matrix[y][x] === 0) {
@@ -270,12 +271,13 @@ class Arena {
             this.matrix.unshift(row);
             ++y;
     
-            score += rowCount * 10;
-            rowCount *= 2;
+            amountOfRows++;
+            score += multiplier * 10;
+            multiplier *= 2;
         }
         
         this.events.emit('matrix', this.matrix);
-        return score;
+        return {score: score, rows: amountOfRows};
     }
 
     /**
@@ -314,12 +316,13 @@ class Events {
 class Player {
     constructor(tetris){
         
-        this.DROP_SLOW = 600;
+        this.DROP_SLOW = 700;
         this.DROP_FAST = 35;
 
         this.events = new Events();
 
         this.score = 0;
+        this.amountOfBrokenRows = 0;
         this.pos = {x: 0, y: 0};
         this.matrix = null;            
         this.dropCounter = 0;
@@ -406,7 +409,10 @@ class Player {
             this.pos.y--;
             this.arena.merge(this);
             this.reset();
-            this.score += this.arena.sweep();
+            let sweepObj = this.arena.sweep();
+            this.score += sweepObj.score;
+            this.amountOfBrokenRows += sweepObj.rows;
+            this.changeSpeed();
             this.events.emit('score', this.score);
             return true;    // return true when we collide (used to implement the space btn)
         }
@@ -433,6 +439,14 @@ class Player {
     setName(name) {
         this.name = name;
         this.events.emit('name', name);
+    }
+
+    /**
+     * Change the speed of the player. It's calculated based on the amount of
+     * rows he destroyed.
+     */
+    changeSpeed() {
+        this.DROP_SLOW -= (2 * this.amountOfBrokenRows);
     }
 
     /**

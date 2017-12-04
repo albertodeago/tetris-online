@@ -6,12 +6,13 @@
 class Player {
     constructor(tetris){
         
-        this.DROP_SLOW = 600;
+        this.DROP_SLOW = 700;
         this.DROP_FAST = 35;
 
         this.events = new Events();
 
         this.score = 0;
+        this.amountOfBrokenRows = 0;
         this.pos = {x: 0, y: 0};
         this.matrix = null;            
         this.dropCounter = 0;
@@ -98,7 +99,10 @@ class Player {
             this.pos.y--;
             this.arena.merge(this);
             this.reset();
-            this.score += this.arena.sweep();
+            let sweepObj = this.arena.sweep();
+            this.score += sweepObj.score;
+            this.amountOfBrokenRows += sweepObj.rows;
+            this.changeSpeed();
             this.events.emit('score', this.score);
             return true;    // return true when we collide (used to implement the space btn)
         }
@@ -125,6 +129,14 @@ class Player {
     setName(name) {
         this.name = name;
         this.events.emit('name', name);
+    }
+
+    /**
+     * Change the speed of the player. It's calculated based on the amount of
+     * rows he destroyed.
+     */
+    changeSpeed() {
+        this.DROP_SLOW -= (2 * this.amountOfBrokenRows);
     }
 
     /**
