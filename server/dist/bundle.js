@@ -334,6 +334,8 @@ class Player {
         this.gameOver = false;
         this.name = '';
 
+        this.invertedKeys = false;
+
         this.reset();
     }
     
@@ -406,14 +408,26 @@ class Player {
         this.pos.y++;
         this.dropCounter = 0;
         if(this.arena.collide(this)) {
+            
+            this.dropInterval = this.DROP_SLOW;     // Fix attempt of weird bug
+            
+            // update position
             this.pos.y--;
             this.arena.merge(this);
-            this.reset();
+            
             let sweepObj = this.arena.sweep();
             this.score += sweepObj.score;
-            this.amountOfBrokenRows += sweepObj.rows;
-            this.changeSpeed();
+            
+            if(sweepObj.rows > 0) {
+                this.amountOfBrokenRows += sweepObj.rows;
+                this.changeSpeed(sweepObj.rows);            
+            }
+
+            if(sweepObj.rows)
+                this.testDebuff();
             this.events.emit('score', this.score);
+            
+            this.reset();
             return true;    // return true when we collide (used to implement the space btn)
         }
         
@@ -442,11 +456,12 @@ class Player {
     }
 
     /**
-     * Change the speed of the player. It's calculated based on the amount of
-     * rows he destroyed.
+     * Change the speed of the player based on the amount of broken rows of this turn.
      */
-    changeSpeed() {
-        this.DROP_SLOW -= (3 * this.amountOfBrokenRows);
+    changeSpeed(brokenRows) {
+        this.dropInterval -= (2 * brokenRows);
+        this.DROP_SLOW = this.dropInterval; // maintain updated the DROP_SLOW constant
+        console.log("Speed increased", this.dropInterval);
     }
 
     /**
@@ -471,6 +486,37 @@ class Player {
             matrix.forEach(row => row.reverse());
         else 
             matrix.reverse();
+    }
+
+    testDebuff() {
+        let duration = 10000; // 10 sec debuff duration
+        var num = getRandomInt(0, 3);
+         num = 2;
+        if(num === 0) {
+            duration = 20000;   // 20 sec of haste
+            const factor = 2;   // 2x of speed
+            this.dropInterval /= factor;
+            this.DROP_FAST /= factor;
+            console.log("HASTE START", this.dropInterval);
+            setTimeout(() => {
+                this.dropInterval *= factor;
+                this.DROP_FAST *= factor;    
+                console.log('HASTE ENEDED', this.dropInterval);
+            }, duration)
+        } else if(num === 1) {
+            this.invertedKeys = true;
+            setTimeout(() => { this.invertedKeys = false }, duration);  // TODO should base on amount of pieces
+        } else if(num === 2) {
+            var el = this.tetris.element.querySelector('.tetris');
+            el.classList.add('swing-debuff');
+            setTimeout( () => {
+                el.classList.remove('swing-debuff');
+            }, duration);
+        } else if(num === 3) {
+            
+        } else if(num === 4) {
+            
+        }
     }
 
     /**
@@ -584,15 +630,7 @@ class Tetris {
             row.forEach((value, x) => {
                 if(value !== 0) {
                     let ctx = this.context;
-                    // ctx.fillStyle = this.colors[value];
-                    // ctx.fillRect(x+offset.x, y+offset.y, 1, 1);
-                    
-                    var grd=ctx.createRadialGradient(75,50,5,90,60,100);
-                    grd.addColorStop(0, this.colors[value]);
-                    grd.addColorStop(1,"black");
-                    
-                    // Fill with gradient
-                    ctx.fillStyle = grd;
+                    ctx.fillStyle = this.colors[value];
                     ctx.fillRect(x+offset.x, y+offset.y, 1, 1);
 
                     ctx.lineWidth="0.05";
@@ -694,13 +732,16 @@ var HOST = location.origin.replace(/^http/, 'ws')
 console.log("connecting to ", HOST);
 connectionManager.connect(HOST);
 
+const keys = [37, 39, 81, 38, 40, 32]    // left right q up down space
+const invertedKeys = [39, 37, 81, 40, 38, 32]    // left right q up down space
 const keyListener = e => {
     [
-        [37, 39, 81, 38, 40, 32]    // left right q up down space
+        keys
     ].forEach( (key, index) => {
         const player = localTetris.player;
-        const arena = localTetris.arena;
         if(!player.gameOver) { 
+            if(player.invertedKeys)
+                key = invertedKeys;
             if( e.type === 'keydown') {
                 if(e.keyCode === key[0]) { 
                     player.move(-1);
@@ -712,7 +753,7 @@ const keyListener = e => {
                     player.rotate(-1);
                 }
                 else if(e.keyCode === key[3]) {
-                    player.rotate(+1);
+                        pressedUp(player, e);
                 }
                 else if(e.keyCode === key[5]) {
                     while(!player.drop()) { }
@@ -720,16 +761,22 @@ const keyListener = e => {
             }
             
             if(e.keyCode === key[4]) {
-                if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
-                    player.drop();
-                    player.dropInterval = player.DROP_FAST;
-                } 
-                else 
-                    player.dropInterval = player.DROP_SLOW;
+                    pressedDown(player, e);
             }
         }
     })
 };
+function pressedUp(player, e) {
+    player.rotate(+1);
+}
+function pressedDown(player, e) {
+    if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
+        player.dropInterval = player.DROP_FAST;
+        player.drop();
+    } 
+    else 
+        player.dropInterval = player.DROP_SLOW;
+}
 
 document.addEventListener('keydown', keyListener); 
 document.addEventListener('keyup', keyListener);
@@ -742,3 +789,10 @@ function startGame() {
     if(!localTetris.isStarted)
         localTetris.run();
 }
+
+//The maximum is exclusive and the minimum is inclusive
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; 
+  }

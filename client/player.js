@@ -24,6 +24,8 @@ class Player {
         this.gameOver = false;
         this.name = '';
 
+        this.invertedKeys = false;
+
         this.reset();
     }
     
@@ -96,14 +98,26 @@ class Player {
         this.pos.y++;
         this.dropCounter = 0;
         if(this.arena.collide(this)) {
+            
+            this.dropInterval = this.DROP_SLOW;     // Fix attempt of weird bug
+            
+            // update position
             this.pos.y--;
             this.arena.merge(this);
-            this.reset();
+            
             let sweepObj = this.arena.sweep();
             this.score += sweepObj.score;
-            this.amountOfBrokenRows += sweepObj.rows;
-            this.changeSpeed();
+            
+            if(sweepObj.rows > 0) {
+                this.amountOfBrokenRows += sweepObj.rows;
+                this.changeSpeed(sweepObj.rows);            
+            }
+
+            if(sweepObj.rows)
+                this.testDebuff();
             this.events.emit('score', this.score);
+            
+            this.reset();
             return true;    // return true when we collide (used to implement the space btn)
         }
         
@@ -132,11 +146,12 @@ class Player {
     }
 
     /**
-     * Change the speed of the player. It's calculated based on the amount of
-     * rows he destroyed.
+     * Change the speed of the player based on the amount of broken rows of this turn.
      */
-    changeSpeed() {
-        this.DROP_SLOW -= (3 * this.amountOfBrokenRows);
+    changeSpeed(brokenRows) {
+        this.dropInterval -= (2 * brokenRows);
+        this.DROP_SLOW = this.dropInterval; // maintain updated the DROP_SLOW constant
+        console.log("Speed increased", this.dropInterval);
     }
 
     /**
@@ -161,6 +176,37 @@ class Player {
             matrix.forEach(row => row.reverse());
         else 
             matrix.reverse();
+    }
+
+    testDebuff() {
+        let duration = 10000; // 10 sec debuff duration
+        var num = getRandomInt(0, 3);
+         num = 2;
+        if(num === 0) {
+            duration = 20000;   // 20 sec of haste
+            const factor = 2;   // 2x of speed
+            this.dropInterval /= factor;
+            this.DROP_FAST /= factor;
+            console.log("HASTE START", this.dropInterval);
+            setTimeout(() => {
+                this.dropInterval *= factor;
+                this.DROP_FAST *= factor;    
+                console.log('HASTE ENEDED', this.dropInterval);
+            }, duration)
+        } else if(num === 1) {
+            this.invertedKeys = true;
+            setTimeout(() => { this.invertedKeys = false }, duration);  // TODO should base on amount of pieces
+        } else if(num === 2) {
+            var el = this.tetris.element.querySelector('.tetris');
+            el.classList.add('swing-debuff');
+            setTimeout( () => {
+                el.classList.remove('swing-debuff');
+            }, duration);
+        } else if(num === 3) {
+            
+        } else if(num === 4) {
+            
+        }
     }
 
     /**
