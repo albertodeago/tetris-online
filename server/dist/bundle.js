@@ -583,17 +583,21 @@ class Tetris {
         matrix.forEach((row,y) => {
             row.forEach((value, x) => {
                 if(value !== 0) {
-                    this.context.fillStyle = this.colors[value];
-                    this.context.fillRect(x+offset.x, y+offset.y, 1, 1);
-
+                    let ctx = this.context;
+                    // ctx.fillStyle = this.colors[value];
+                    // ctx.fillRect(x+offset.x, y+offset.y, 1, 1);
                     
-                    // this.context.beginPath();
-                    this.context.lineWidth="0.05";
-                    this.context.strokeStyle="#000";
-                    this.context.strokeRect(x+offset.x, y+offset.y, 1, 1); 
-                    // this.context.stroke();
-                    // this.context.strokeStyle = 'red';
-                    // this.context.strokeRect(x+offset.x, y+offset.y, 1, 1);
+                    var grd=ctx.createRadialGradient(75,50,5,90,60,100);
+                    grd.addColorStop(0, this.colors[value]);
+                    grd.addColorStop(1,"black");
+                    
+                    // Fill with gradient
+                    ctx.fillStyle = grd;
+                    ctx.fillRect(x+offset.x, y+offset.y, 1, 1);
+
+                    ctx.lineWidth="0.05";
+                    ctx.strokeStyle="#000";
+                    ctx.strokeRect(x+offset.x, y+offset.y, 1, 1); 
                 }
             });
         });
