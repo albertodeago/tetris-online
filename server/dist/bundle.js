@@ -495,9 +495,14 @@ class Player {
 
     testDebuff() {
         let duration = 10000; // 10 sec debuff duration
+
+        // debuff bar
+        var debuffBar = this.tetris.element.querySelector('.debuff-bar');
+        debuffBar.classList.add('debuff-' + duration/1000);
+        
         var num = getRandomInt(0, 5);
         if(num === 0) {
-            duration = 20000;   // 20 sec of haste
+            // duration = 20000;   // 20 sec of haste
             const factor = 2;   // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
@@ -526,6 +531,11 @@ class Player {
                 el.classList.remove('small-debuff');
             }, duration);
         }
+
+        setTimeout( () => {
+            debuffBar.classList.remove('debuff-' + duration/1000);
+        }, duration);
+        
     }
 
     /**

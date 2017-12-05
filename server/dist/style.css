@@ -98,17 +98,35 @@ body {
     height: calc(100% - 100px);
 }
 .tetris.small-debuff {
-    height: calc(100px);
+    height: calc(200px);
 }
 
 .score {
     height: 50px;
 }
 
+.debuff-bar {
+    height: 5px;
+    background: red;
+    width: 0%;
+}
+.debuff-10 {
+    animation: debuff-bar 10s infinite linear;
+}
+
 .game-over {
     opacity: 0.3;
 }
 /*****************************************************/
+
+@keyframes debuff-bar {
+    from { 
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
 
 .rotate-debuff {
     -webkit-animation: rotating 2s infinite linear;
