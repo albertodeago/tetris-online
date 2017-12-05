@@ -335,6 +335,7 @@ class Player {
         this.name = '';
 
         this.invertedKeys = false;
+        this.rotatingPieces = false;
 
         this.reset();
     }
@@ -406,6 +407,10 @@ class Player {
      */
     drop() {
         this.pos.y++;
+
+        if(this.rotatingPieces)
+            this.rotate(+1);
+
         this.dropCounter = 0;
         if(this.arena.collide(this)) {
             
@@ -490,8 +495,7 @@ class Player {
 
     testDebuff() {
         let duration = 10000; // 10 sec debuff duration
-        var num = getRandomInt(0, 3);
-         num = 2;
+        var num = getRandomInt(0, 5);
         if(num === 0) {
             duration = 20000;   // 20 sec of haste
             const factor = 2;   // 2x of speed
@@ -513,9 +517,14 @@ class Player {
                 el.classList.remove('swing-debuff');
             }, duration);
         } else if(num === 3) {
-            
+            this.rotatingPieces = true;
+            setTimeout( () => { this.rotatingPieces = false }, duration);            
         } else if(num === 4) {
-            
+            var el = this.tetris.element.querySelector('.tetris');
+            el.classList.add('small-debuff');
+            setTimeout( () => {
+                el.classList.remove('small-debuff');
+            }, duration);
         }
     }
 

@@ -51,11 +51,20 @@ body {
     bottom: 0;
 }
 .controls-header {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     font-size: 40px;
 }
 .controls-text {
     font-size: 25px;
+}
+.input-player-name {    
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    font-size: 23px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /************************************************/
@@ -87,6 +96,9 @@ body {
 .tetris {
     border: 0.2em solid #999;
     height: calc(100% - 100px);
+}
+.tetris.small-debuff {
+    height: calc(100px);
 }
 
 .score {
@@ -120,8 +132,8 @@ body {
 }
 
 .swing-debuff {
-	  -webkit-animation: swinging 3.5s linear forwards infinite;
-	  animation: swinging 3.5s linear forwards infinite;
+	  -webkit-animation: swinging 3s linear forwards infinite;
+	  animation: swinging 3s linear forwards infinite;
   }
   @-webkit-keyframes swinging{
 	  0%{-webkit-transform: rotate(0deg);}
