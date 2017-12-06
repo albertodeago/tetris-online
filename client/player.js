@@ -118,8 +118,11 @@ class Player {
                 this.changeSpeed(sweepObj.rows);            
             }
 
-            if(sweepObj.rows)
-                this.testDebuff();
+            if(sweepObj.rows) {
+                // this.testDebuff();
+                this.sendDebuff();
+            }
+
             this.events.emit('score', this.score);
             
             this.reset();
@@ -183,16 +186,23 @@ class Player {
             matrix.reverse();
     }
 
-    testDebuff() {
-        let duration = 10000; // 10 sec debuff duration
+    sendDebuff() {
+        const debuffs = [
+            'HASTE',
+            'KEYS-INVERTED',
+            'ARENA-SWING',
+            'ROTATING-PIECE',
+            'ARENA-MINI'
+        ];
+        const random = getRandomInt(0, debuffs.length);
+        this.events.emit('send-debuff', debuffs[random]);
+    }
 
-        // debuff bar
-        var debuffBar = this.tetris.element.querySelector('.debuff-bar');
-        debuffBar.classList.add('debuff-' + duration/1000);
+    applyDebuff(debuffType) {
+        let duration = 10000; // 10 sec debuff duration
         
-        var num = getRandomInt(0, 5);
-        if(num === 0) {
-            // duration = 20000;   // 20 sec of haste
+        if(debuffType === 'HASTE') {
+            duration = 20000;   // 20 sec of haste
             const factor = 2;   // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
@@ -202,19 +212,19 @@ class Player {
                 this.DROP_FAST *= factor;    
                 console.log('HASTE ENEDED', this.dropInterval);
             }, duration)
-        } else if(num === 1) {
+        } else if(debuffType === 'KEYS-INVERTED') {
             this.invertedKeys = true;
             setTimeout(() => { this.invertedKeys = false }, duration);  // TODO should base on amount of pieces
-        } else if(num === 2) {
+        } else if(debuffType === 'ARENA-SWING') {
             var el = this.tetris.element.querySelector('.tetris');
             el.classList.add('swing-debuff');
             setTimeout( () => {
                 el.classList.remove('swing-debuff');
             }, duration);
-        } else if(num === 3) {
+        } else if(debuffType === 'ROTATING-PIECE') {
             this.rotatingPieces = true;
             setTimeout( () => { this.rotatingPieces = false }, duration);            
-        } else if(num === 4) {
+        } else if(debuffType === 'ARENA-MINI') {
             var el = this.tetris.element.querySelector('.tetris');
             el.classList.add('small-debuff');
             setTimeout( () => {
@@ -222,6 +232,11 @@ class Player {
             }, duration);
         }
 
+        // debuff bar
+        var debuffBar = this.tetris.element.querySelector('.debuff-bar');
+        debuffBar.classList.add('debuff-' + duration/1000);
+
+        // timeout to stop the debuff bar
         setTimeout( () => {
             debuffBar.classList.remove('debuff-' + duration/1000);
         }, duration);

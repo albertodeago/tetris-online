@@ -65,13 +65,48 @@ function broadcastSession(session) {
     });
 }
 
+function sendDebuffToRandomClient(sender, msg) {
+    const session = sender.session;
+    const clients = [...session.clients]; 
+    const possibleClients = clients.filter( (c) => { 
+        return (c.id !== sender.id && c.state.player.gameOver !== true) 
+    });
+    
+    const unfortunateClient = possibleClients[ getRandomInt(0, possibleClients.length) ];
+
+    // Send debuff only if there is at least 1 player to send to
+    if(unfortunateClient) {  
+        unfortunateClient.send(msg);
+    }
+}
+
+// function getRandomClientExceptMe(sender) {
+//     const session = sender.session;
+//     const clients = [...session.clients]; 
+//     const possibleClients = clients.filter( (c) => { 
+//         return (c.id !== sender.id && c.state.player.gameOver !== true) 
+//     });
+
+//     return possibleClients[ getRandomInt(0, possibleClients.length) ];
+// }
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; 
+}
+
 server.on('connection', conn => {
     console.log('Connection established');
     const client = createClient(conn);
 
     conn.on('message', msg => {
-        // console.log('Message received', msg);
+        //console.log('Message received', msg);
         const data = JSON.parse(msg);
+
+        if(data.type !== 'state-update') {
+            console.log("received ", msg);
+        }
 
         if(data.type === 'create-session') {
             const session = createSession();
@@ -104,6 +139,18 @@ server.on('connection', conn => {
         } else if(data.type === 'start-game') {
             // we simply send the message to every player
             client.broadcast(data);
+        } else if(data.type === 'send-debuff') {
+            // var targettedClient = getRandomClientExceptMe(client);
+
+            // console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);
+            const msgToSend = {
+                type: 'apply-debuff',
+                debuffType: data.debuffType,
+                // targettedClient: targettedClient.id
+            };
+            // client.superBroadcast(msgToSend);
+            sendDebuffToRandomClient(client, msgToSend);
+
         }
     })
 

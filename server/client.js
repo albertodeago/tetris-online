@@ -21,6 +21,13 @@ class Client {
         })
     }
 
+    // superBroadcast(data) {
+    //     if(!this.session) 
+    //         throw new Exception('Cannot broadcast without a session');
+
+    //         this.session.clients.forEach( client => { client.send(data) });
+    // }
+
     send(data) {
         const msg = JSON.stringify(data);
         // console.log('Sending message', msg);

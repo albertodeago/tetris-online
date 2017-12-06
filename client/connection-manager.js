@@ -60,6 +60,12 @@ class ConnectionManager {
                 fragment: 'game'
             });
         });
+        player.events.listen('send-debuff', (val) => {
+            this.send({
+                type: 'send-debuff',
+                debuffType: val
+            })
+        })
 
         const arena = local.arena;
     
@@ -140,6 +146,22 @@ class ConnectionManager {
         } else if(data.type === 'start-game') {
             if(!this.localTetris.isStarted)
                 this.localTetris.run();
+        } else if(data.type === 'apply-debuff') {
+            // var targettedPlayer = null;
+
+            // this.tetrisManager.instances.forEach( instance => {
+            //     if(instance.element.id === data.targettedClient)
+            //         targettedPlayer = instance.player;
+            // })
+
+            // const targettedPeer = this.peers.get(data.targettedClient);
+
+            // if(!targettedPeer) {     // no targetted peers, so I am the target
+            //     this.localTetris.player.applyDebuff(data.debuffType);
+            // } else {
+            //     targettedPeer.player.applyDebuff(data.debuffType);
+            // }
+            this.localTetris.player.applyDebuff(data.debuffType);
         }
     }
 

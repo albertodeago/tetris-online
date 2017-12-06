@@ -145,7 +145,7 @@ class Tetris {
      */
     setPlayerName(name = 'Unnamed player') {
         this.element.querySelector('.name').innerText = name;
-        this.player.setName(name);
+        // this.player.setName(name);   // TODO FIX
     }    
 
 }
