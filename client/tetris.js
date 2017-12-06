@@ -143,9 +143,18 @@ class Tetris {
      * Set the name of the player or generate a random one if missing parameter
      * @param {String} name 
      */
-    setPlayerName(name = 'Unnamed player') {
+    setPlayerName(name) {
+        name = name || 'Unnamed player';    // TODO create random cool names ?
         this.element.querySelector('.name').innerText = name;
-        // this.player.setName(name);   // TODO FIX
+        
+        // if the setName function is defined means that the player we are talking about
+        // is the local player, so we call the right setName method
+        // otherwise is a peer (another player), so we simply set the property
+        if(this.player.setName) {
+            this.player.setName(name);
+        } else {
+            this.player.name = name;
+        }
     }    
 
 }
