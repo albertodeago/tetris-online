@@ -16,29 +16,35 @@ const keyListener = e => {
         keys
     ].forEach( (key, index) => {
         const player = localTetris.player;
-        if(!player.gameOver) { 
+        if(!player.gameOver && localTetris.isStarted) { 
             if(player.invertedKeys)
                 key = invertedKeys;
             if( e.type === 'keydown') {
                 if(e.keyCode === key[0]) { 
                     player.move(-1);
+                    e.preventDefault();
                 }
                 else if(e.keyCode === key[1]) { 
                     player.move(+1);
+                    e.preventDefault();
                 }
                 else if(e.keyCode === key[2]) {
                     player.rotate(-1);
+                    e.preventDefault();
                 }
                 else if(e.keyCode === key[3]) {
-                        pressedUp(player, e);
+                    pressedUp(player, e);
+                    e.preventDefault();
                 }
                 else if(e.keyCode === key[5]) {
                     while(!player.drop()) { }
+                    e.preventDefault();
                 }
             }
             
             if(e.keyCode === key[4]) {
-                    pressedDown(player, e);
+                pressedDown(player, e);
+                e.preventDefault();
             }
         }
     })
