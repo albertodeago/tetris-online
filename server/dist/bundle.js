@@ -866,4 +866,21 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; 
-  }
+}
+
+
+var mobile_left = document.getElementById('mobile-control-left');
+var mobile_right = document.getElementById('mobile-control-right');
+var mobile_up = document.getElementById('mobile-control-up');
+var mobile_down = document.getElementById('mobile-control-down');
+var mobile_space = document.getElementById('mobile-control-space');
+
+handleModileLeft = function(e) {
+    const player = localTetris.player;
+    if(!player.gameOver && localTetris.isStarted) { 
+        player.move(-1);
+        e.preventDefault();
+    }
+}
+
+mobile_left.addEventListener("touchend", handleModileLeft, false);

@@ -61,9 +61,6 @@ function pressedDown(player, e) {
         player.dropInterval = player.DROP_SLOW;
 }
 
-document.addEventListener('keydown', keyListener); 
-document.addEventListener('keyup', keyListener);
-
 function startGame() {    
     // send a message to other players to start the game
     localTetris.player.events.emit('start-game');
@@ -78,4 +75,38 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; 
-  }
+}
+
+var isMobile = false;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    isMobile = true;
+}
+
+if(isMobile) {
+    
+    // TODO se è un "tap" player.rotate
+    // TODO se è un touchMove e si muove più di un tot player.move
+    // TODO se è un touchMove verso il basso di un tot while(!player.drop()) { }
+
+    var mobile_left = document.getElementById('mobile-control-left');
+    var mobile_right = document.getElementById('mobile-control-right');
+    var mobile_up = document.getElementById('mobile-control-up');
+    var mobile_down = document.getElementById('mobile-control-down');
+    var mobile_space = document.getElementById('mobile-control-space');
+    
+    handleModileLeft = function(e) {
+        const player = localTetris.player;
+        if(!player.gameOver && localTetris.isStarted) { 
+            player.move(-1);
+            e.preventDefault();
+        }
+    }
+    
+    mobile_left.addEventListener("touchend", handleModileLeft, false);
+
+} else {
+
+    document.addEventListener('keydown', keyListener); 
+    document.addEventListener('keyup', keyListener);
+
+}
