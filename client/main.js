@@ -68,6 +68,8 @@ function startGame() {
     // start also the local game
     if(!localTetris.isStarted)
         localTetris.run();
+
+    attachEventListeners();
 }
 
 //The maximum is exclusive and the minimum is inclusive
@@ -77,36 +79,108 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min; 
 }
 
-var isMobile = false;
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    isMobile = true;
-}
+function attachEventListeners() {
+    var isMobile = false;
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        isMobile = true;
+    }
 
-if(isMobile) {
-    
-    // TODO se è un "tap" player.rotate
-    // TODO se è un touchMove e si muove più di un tot player.move
-    // TODO se è un touchMove verso il basso di un tot while(!player.drop()) { }
+    if(isMobile) {
 
-    var mobile_left = document.getElementById('mobile-control-left');
-    var mobile_right = document.getElementById('mobile-control-right');
-    var mobile_up = document.getElementById('mobile-control-up');
-    var mobile_down = document.getElementById('mobile-control-down');
-    var mobile_space = document.getElementById('mobile-control-space');
-    
-    handleModileLeft = function(e) {
         const player = localTetris.player;
-        if(!player.gameOver && localTetris.isStarted) { 
-            player.move(-1);
+
+        handleModileLeft = function(e) {
+            isMoving = true;
+            if(!player.gameOver && localTetris.isStarted && !isDropping) { 
+                player.move(-1);
+            }
+        }
+        handleModileRight = function(e) {
+            isMoving = true;
+            if(!player.gameOver && localTetris.isStarted && !isDropping) { 
+                player.move(+1);
+            }
+        }
+        handleMobileDown = function(e) {
+            isMoving = true;
+            isDropping = true;
+            if(!player.gameOver && localTetris.isStarted) { 
+                player.drop();
+            }
+        }
+        // handleMobileSpaceBar = function(e) {
+        //     isMoving = true;
+        //     if(!player.gameOver && localTetris.isStarted && !isDropping) {
+        //         while(!player.drop()) {}
+        //     }
+        //     isDropping = true;
+        // }
+        handleMobileRotation = function() {
+            if(!player.gameOver && localTetris.isStarted) { 
+                player.rotate(+1);
+            }
+        }
+
+        const deviceX = document.documentElement.clientWidth;
+        const deviceY = document.documentElement.clientHeight;
+        console.log("Mobile viewport:", deviceX, deviceY);
+
+        const nSquareX = 12;
+        const nSquareY = 20;
+        const minSpaceX = deviceX / (nSquareX * 2);
+        const minSpaceY = deviceY / (nSquareY * 2);  // space to drop the piece by 1 
+        const dropSpaceY = deviceY / 3;        // space to drop totally the piece
+
+        let firstX = null;
+        let firstY = null;
+        let isMoving = false;
+        let isDropping = false;
+        
+        var handleTouchStart = function(e) {
+            firstX = e.touches[0].clientX;
+            firstY = e.touches[0].clientY;
             e.preventDefault();
         }
+
+        var handleTouchEnd = function(e) {
+            firstX = null;
+            firstY = null;
+            if(!isMoving) {
+                handleMobileRotation();
+            }
+            isMoving = false;
+            isDropping = false;
+        }
+
+        var handleMove = function(e){
+            let touch = e.touches[0];
+            // console.log("touch move " + touch.clientX + " " + touch.clientY);
+            console.log(touch.clientY, (firstY - dropSpaceY));
+            if(touch.clientX > (firstX + minSpaceX)) {
+                firstX = touch.clientX;
+                handleModileRight(e);
+            } else if(touch.clientX < (firstX - minSpaceX)) {
+                firstX = touch.clientX;
+                handleModileLeft(e);
+            } else if(touch.clientY > (firstY + minSpaceY)) {
+                firstY = touch.clientY;
+                handleMobileDown(e);
+            // } else if(touch.clientY < (firstY - dropSpaceY)) {
+            //     firstY = touch.clientY;
+            //     handleMobileSpaceBar(e);
+            }
+        }
+
+        let el = document.getElementById('game-wrapper');
+
+        el.addEventListener('touchstart', handleTouchStart, {passive: false});
+        el.addEventListener('touchmove', handleMove, {passive: false});
+        el.addEventListener('touchend', handleTouchEnd, {passive: false});
+
+    } else {
+
+        document.addEventListener('keydown', keyListener); 
+        document.addEventListener('keyup', keyListener);
+
     }
-    
-    mobile_left.addEventListener("touchend", handleModileLeft, false);
-
-} else {
-
-    document.addEventListener('keydown', keyListener); 
-    document.addEventListener('keyup', keyListener);
-
 }

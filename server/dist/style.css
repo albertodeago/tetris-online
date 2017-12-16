@@ -1,4 +1,3 @@
-
 body {
     position:relative;
     display: flex;
@@ -7,6 +6,12 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 2em;
     text-align: center;
+}
+
+#game-wrapper {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
 /******************* START GAME *****************/
@@ -76,8 +81,6 @@ body {
     flex-flow: row wrap;
     width: 100%;
     height: 100%;
-    /* height: 100vh;
-    width: 100vw; */
 }
 
 .player {
@@ -117,6 +120,33 @@ body {
 .game-over {
     opacity: 0.3;
 }
+
+
+/******************* MOBILE *************************/ 
+
+
+@media only screen and (max-width: 768px) {
+    
+    body {
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .local {
+        flex: 1 0 70%;
+        max-height: 100vh;
+    }
+    .local .tetris {
+        width: 80%; 
+        height: 80%;
+    }
+
+}
+
+/********************* END MOBILE ********************/
+
+
 /*****************************************************/
 
 @keyframes debuff-bar {
@@ -166,4 +196,4 @@ body {
 	50%{transform: rotate(0deg)}
 	75%{transform: rotate(-15deg);}
 	100%{transform: rotate(0deg);}
-} 
+}

@@ -1,3 +1,5 @@
+const debuggingActive = false;
+
 class ConnectionManager {
 
     constructor (tetrisManager) {
@@ -18,7 +20,7 @@ class ConnectionManager {
         });
 
         this.conn.addEventListener('message', event => {
-            console.log('Received message', event.data);
+            debuggingActive && console.log('Received message', event.data);
             this.receive(event.data);
         });
     }
@@ -167,7 +169,7 @@ class ConnectionManager {
 
     send(data) {
         const msg = JSON.stringify(data);
-        console.log('Sending message ', msg);
+        debuggingActive && console.log('Sending message ', msg);
         this.conn.send(msg);
     }
     

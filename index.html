@@ -2,39 +2,47 @@
 <html>
     <head>
         <title>Tetris</title>
+        <meta name="viewport" content="user-scalable=0"> 
         <link href="/dist/style.css" rel="stylesheet">
     </head>
 
     <body>
-        <div id="start-game-container" class="modal-bkg">
-            <div id="start-game-btn" class="start-game-btn" onclick="startGame()">Start Game</div>
+        
+        <div id="game-wrapper">
             
-            <div id="waiting-game" class="waiting-game">
-                <div id="waiting-label" class="waiting-label">Wait room owner to start the game...</div>
-                <div class="controls-panel">
-                    <div class="controls-label controls-header">This is a simple tetris multiplayer game</div>
-                    <input type="text" id="input-player-name" class="input-player-name"/>
-                    <div class="controls-label controls-text">
-                        Controls are LEFT RIGHT UP DOWN arrows and SPACEBAR to drop immediately the piece
+            <div id="start-game-container" class="modal-bkg">
+                <div id="start-game-btn" class="start-game-btn" onclick="startGame()">Start Game</div>
+                
+                <div id="waiting-game" class="waiting-game">
+                    <div id="waiting-label" class="waiting-label">Wait room owner to start the game...</div>
+                    <div class="controls-panel">
+                        <div class="controls-label controls-header">This is a simple tetris multiplayer game</div>
+                        <input type="text" id="input-player-name" class="input-player-name"/>
+                        <div class="controls-label controls-text">
+                            Controls are LEFT RIGHT UP DOWN arrows and SPACEBAR to drop immediately the piece
+                        </div>
                     </div>
                 </div>
+                
             </div>
+
+            <div id="players-wrapper" class="players-wrapper">
             
-        </div>
+                <template id="player-template">
+                    <div class="player">
+                        <div class="name"></div>
+                        <div class="score"></div>
+                        <canvas class="tetris" width="360" height="600"></canvas>
+                        <div class="debuff-bar"></div>
+                    </div>
+                </template>
 
-        <div id="players-wrapper" class="players-wrapper">
+            </div>
         
-            <template id="player-template">
-                <div class="player">
-                    <div class="name"></div>
-                    <div class="score"></div>
-                    <canvas class="tetris" width="360" height="600"></canvas>
-                    <div class="debuff-bar"></div>
-                </div>
-            </template>
+        </div>  <!-- game wrapper -->
 
-        </div>
         
         <script type="text/javascript" src="/dist/bundle.js"></script>
+        
     </body>
 </html>
