@@ -1,0 +1,48 @@
+@keyframes debuff-bar {
+    from { 
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.rotate-debuff {
+    -webkit-animation: rotating 2s infinite linear;
+    animation: rotating 2s infinite linear;
+}
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+    }
+}
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.swing-debuff {
+	  -webkit-animation: swinging 3s linear forwards infinite;
+	  animation: swinging 3s linear forwards infinite;
+  }
+  @-webkit-keyframes swinging{
+	  0%{-webkit-transform: rotate(0deg);}
+	  25%{-webkit-transform: rotate(15deg)}
+	  50%{-webkit-transform: rotate(0deg)}
+	  75%{-webkit-transform: rotate(-15deg);}
+	  100%{-webkit-transform: rotate(0deg);}
+  }
+  @keyframes swinging{
+	0%{transform: rotate(0deg);}
+	25%{transform: rotate(15deg)}
+	50%{transform: rotate(0deg)}
+	75%{transform: rotate(-15deg);}
+	100%{transform: rotate(0deg);}
+}

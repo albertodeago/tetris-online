@@ -12,6 +12,7 @@ var files = [
     './client/events.js', 
     './client/player.js', 
     './client/tetris.js', 
+    './client/player-control-handlers.js',
     './client/main.js', 
 ];
 gulp.task('bundle-js', () => {          //  TODO minify
@@ -27,11 +28,24 @@ gulp.task('copy-style', function () {
     gulp.src('./style.css')
         .pipe(gulp.dest('./server/dist/'));
 });
+gulp.task('copy-style-mobile', function () {
+    gulp.src('./style-mobile.css')
+        .pipe(gulp.dest('./server/dist/'));
+});
+gulp.task('copy-style-animations', function () {
+    gulp.src('./style-animations.css')
+        .pipe(gulp.dest('./server/dist/'));
+});
 
 
 /**
  * Bundle js and copy style
  */
 gulp.task('bundle', () => {
-    gulp.start('bundle-js', 'copy-style');
+    gulp.start(
+        'bundle-js', 
+        'copy-style', 
+        'copy-style-mobile', 
+        'copy-style-animations'
+    );
 });

@@ -7,11 +7,15 @@ const Client = require('./client');
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, '../index.html');
 const STYLE = path.join(__dirname, '../style.css');
+const STYLE_MOBILE = path.join(__dirname, '../style-mobile.css');
+const STYLE_ANIMATIONS = path.join(__dirname, '../style-animations.css');
 const BUNDLE = path.join(__dirname + '/dist/bundle.js');
 
 const httpServer = express()
     .use('/index.html', (req, res) => res.sendFile(INDEX))
     .use('/dist/style.css', (req, res) => res.sendFile(STYLE))
+    .use('/dist/style-mobile.css', (req, res) => res.sendFile(STYLE_MOBILE))
+    .use('/dist/style-animations.css', (req, res) => res.sendFile(STYLE_ANIMATIONS))
     .use('/dist/bundle.js', (req, res) => res.sendFile(BUNDLE))
     .listen(PORT, () => console.log('Listening on ' + PORT));
 
