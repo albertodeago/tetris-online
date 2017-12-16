@@ -58,8 +58,15 @@ class Tetris {
             row.forEach((value, x) => {
                 if(value !== 0) {
                     let ctx = this.context;
+                    
+                    // "shadow" effect
+                    // ctx.shadowOffsetX = -1.5;
+                    // ctx.shadowOffsetY = -1.5;
+                    // ctx.shadowBlur = 0.5;
+                    // ctx.shadowColor = "white"; //this.colors[value];
+
                     ctx.fillStyle = this.colors[value];
-                    ctx.fillRect(x+offset.x, y+offset.y, 1, 1);
+                    ctx.fillRect(x+offset.x, y+offset.y, 1, 1);                
 
                     ctx.lineWidth="0.05";
                     ctx.strokeStyle="#000";
