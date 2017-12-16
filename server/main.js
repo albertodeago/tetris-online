@@ -121,7 +121,9 @@ server.on('connection', conn => {
                 type: 'session-created', 
                 id: session.id
             });
-        } else if(data.type === 'join-session') {
+        } 
+        
+        else if(data.type === 'join-session') {
             let session = getSession(data.id);
             // if the session is not existend we create new one with tht id
             if(!session) {  
@@ -136,14 +138,33 @@ server.on('connection', conn => {
             client.state = data.state;
 
             broadcastSession(session);
-        } else if(data.type === 'state-update') {
+        } 
+        
+        else if(data.type === 'state-update') {
             const [prop, value] = data.entry;
             client.state[data.fragment][prop] = value;
             client.broadcast(data);
-        } else if(data.type === 'start-game') {
+        } 
+        
+        else if(data.type === 'start-game') {
             // we simply send the message to every player
             client.broadcast(data);
-        } else if(data.type === 'send-debuff') {
+        } 
+
+        else if(data.type === 'restart-game') {
+            let sessionId = client.session.id;
+            while(getSession(sessionId)){
+                sessionId = createId();
+            }
+
+            // got a unique sessionId, send to all clients so then can join new that session
+            client.superBroadcast({
+                type: 'go-to-session',
+                id: sessionId
+            });
+        }
+        
+        else if(data.type === 'send-debuff') {
             // var targettedClient = getRandomClientExceptMe(client);
 
             // console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);

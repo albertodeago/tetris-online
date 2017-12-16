@@ -71,7 +71,20 @@ body {
     text-align: center;
     margin-bottom: 20px;
 }
+/************************************************/
 
+/***************** RESTART GAME *****************/
+#restart-game-container {
+    display: none;
+}
+#winner-label {
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 305px);
+}
+#restart-game-btn {
+    display: none;
+}
 /************************************************/
 
 

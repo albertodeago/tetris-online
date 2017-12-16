@@ -49,6 +49,11 @@ class ConnectionManager {
 
         ['pos', 'score', 'matrix', 'gameOver', 'name'].forEach( prop => {
             player.events.listen(prop, value => {
+
+                if(prop === 'gameOver') {
+                    this.checkIfTheGameIsOver();
+                }
+
                 this.send({
                     type: 'state-update',
                     fragment: 'player',
@@ -66,8 +71,13 @@ class ConnectionManager {
             this.send({
                 type: 'send-debuff',
                 debuffType: val
-            })
-        })
+            });
+        });
+        player.events.listen('restart-game', () => {
+            this.send({
+                type: 'restart-game'
+            });
+        });
 
         const arena = local.arena;
     
@@ -119,15 +129,19 @@ class ConnectionManager {
         
         if(prop === 'score') {
             tetris.updateScore(value);
-        } else if(prop === 'name') {
+        } 
+        else if(prop === 'name') {
             tetris.setPlayerName(value);
-        }else {
+        } 
+        else {
             tetris.draw();
         }
 
         if(tetris.player.gameOver === true) {
             let el = document.getElementById(id);
             el.classList.add('game-over');
+
+            this.checkIfTheGameIsOver();
         }
     }
 
@@ -141,16 +155,29 @@ class ConnectionManager {
             window.location.hash = data.id;
             document.getElementById('start-game-btn').style.display = "block";
             document.getElementById('waiting-game').style.display = "none";
-        } else if(data.type === 'session-broadcast') {
+        } 
+        
+        else if(data.type === 'session-broadcast') {
             this.updateManager(data.peers);
-        } else if(data.type === 'state-update') {
+        } 
+        
+        else if(data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.entry);
-        } else if(data.type === 'start-game') {
+        } 
+        
+        else if(data.type === 'start-game') {
             if(!this.localTetris.isStarted) {
                 this.localTetris.run();
                 attachEventListeners();
             }
-        } else if(data.type === 'apply-debuff') {
+        } 
+        
+        else if(data.type === 'go-to-session') {
+            let newUrl = document.location.protocol +"//"+ document.location.hostname + document.location.pathname + '#' + data.id;
+            window.location.href = newUrl;
+        } 
+        
+        else if(data.type === 'apply-debuff') {
             // var targettedPlayer = null;
 
             // this.tetrisManager.instances.forEach( instance => {
@@ -173,6 +200,27 @@ class ConnectionManager {
         const msg = JSON.stringify(data);
         debuggingActive && console.log('Sending message ', msg);
         this.conn.send(msg);
+    }
+
+    checkIfTheGameIsOver() {
+        // Check if the game is over 
+        let stillPlaying = [];
+        this.peers.forEach( p => {
+            if(!p.player.gameOver)
+                stillPlaying.push(p.player);
+        });
+        if(!this.localTetris.player.gameOver){
+            stillPlaying.push(this.localTetris.player);
+        }
+
+        if(stillPlaying.length === 1) { // that's the winner!
+            document.getElementById('winner-label').innerText = "Winner: " + stillPlaying[0].name;
+            document.getElementById('restart-game-container').style.display = "block";
+
+            if(stillPlaying[0] === this.localTetris.player){
+                document.getElementById('restart-game-btn').style.display = "block";
+            }
+        }
     }
     
 }

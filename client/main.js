@@ -21,6 +21,10 @@ function startGame() {
     }
 }
 
+function restartGame() {
+    localTetris.player.askRestartGame();
+}
+
 // Helper function
 // The maximum is exclusive and the minimum is inclusive
 function getRandomInt(min, max) {

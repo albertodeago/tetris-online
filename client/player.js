@@ -198,6 +198,10 @@ class Player {
         this.events.emit('send-debuff', debuffs[random]);
     }
 
+    askRestartGame() {
+        this.events.emit('restart-game');
+    }
+
     applyDebuff(debuffType) {
         let duration = 10000; // 10 sec debuff duration
         
