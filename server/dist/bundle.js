@@ -199,8 +199,10 @@ class ConnectionManager {
         } else if(data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.entry);
         } else if(data.type === 'start-game') {
-            if(!this.localTetris.isStarted)
+            if(!this.localTetris.isStarted) {
                 this.localTetris.run();
+                attachEventListeners();
+            }
         } else if(data.type === 'apply-debuff') {
             // var targettedPlayer = null;
 
@@ -898,13 +900,12 @@ function attachEventListeners() {
                 player.drop();
             }
         }
-        // handleMobileSpaceBar = function(e) {
-        //     isMoving = true;
-        //     if(!player.gameOver && localTetris.isStarted && !isDropping) {
-        //         while(!player.drop()) {}
-        //     }
-        //     isDropping = true;
-        // }
+        handleMobileSpaceBar = function(e) {
+            isMoving = true;
+            if(!player.gameOver && localTetris.isStarted) {
+                while(!player.drop()) {}
+            }
+        }
         handleMobileRotation = function() {
             if(!player.gameOver && localTetris.isStarted) { 
                 player.rotate(+1);
@@ -919,7 +920,7 @@ function attachEventListeners() {
         const nSquareY = 20;
         const minSpaceX = deviceX / (nSquareX * 2);
         const minSpaceY = deviceY / (nSquareY * 2);  // space to drop the piece by 1 
-        const dropSpaceY = deviceY / 3;        // space to drop totally the piece
+        const dropSpaceY = deviceY / 4;        // space to drop totally the piece
 
         let firstX = null;
         let firstY = null;
@@ -955,17 +956,20 @@ function attachEventListeners() {
             } else if(touch.clientY > (firstY + minSpaceY)) {
                 firstY = touch.clientY;
                 handleMobileDown(e);
-            // } else if(touch.clientY < (firstY - dropSpaceY)) {
-            //     firstY = touch.clientY;
-            //     handleMobileSpaceBar(e);
-            }
+            } else if(touch.clientY < (firstY - (dropSpaceY/2)) ) {
+                isDropping = true;                
+                if(touch.clientY < (firstY - dropSpaceY)) {
+                    firstY = touch.clientY;
+                    handleMobileSpaceBar(e);
+                }
+            } 
         }
 
-        let el = document.getElementById('game-wrapper');
+        // let el = document.getElementById('game-wrapper');
 
-        el.addEventListener('touchstart', handleTouchStart, {passive: false});
-        el.addEventListener('touchmove', handleMove, {passive: false});
-        el.addEventListener('touchend', handleTouchEnd, {passive: false});
+        document.addEventListener('touchstart', handleTouchStart, {passive: false});
+        document.addEventListener('touchmove', handleMove, {passive: false});
+        document.addEventListener('touchend', handleTouchEnd, {passive: false});
 
     } else {
 

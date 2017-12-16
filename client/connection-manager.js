@@ -146,8 +146,10 @@ class ConnectionManager {
         } else if(data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.entry);
         } else if(data.type === 'start-game') {
-            if(!this.localTetris.isStarted)
+            if(!this.localTetris.isStarted) {
                 this.localTetris.run();
+                attachEventListeners();
+            }
         } else if(data.type === 'apply-debuff') {
             // var targettedPlayer = null;
 
