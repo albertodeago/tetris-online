@@ -228,6 +228,7 @@ class ConnectionManager {
         else if(data.type === 'go-to-session') {
             let newUrl = document.location.protocol +"//"+ document.location.hostname + document.location.pathname + '#' + data.id;
             window.location.href = newUrl;
+            window.location.reload();
         } 
         
         else if(data.type === 'apply-debuff') {
