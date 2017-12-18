@@ -908,9 +908,11 @@ function attachEventListeners() {
         let isDropping = false;
         
         var handleTouchStart = function(e) {
-            firstX = e.touches[0].clientX;
-            firstY = e.touches[0].clientY;
-            e.preventDefault();
+            if(!e.target.classList.contains('clickable')) {
+                firstX = e.touches[0].clientX;
+                firstY = e.touches[0].clientY;
+                e.preventDefault();
+            }
         }
 
         var handleTouchEnd = function(e) {
@@ -925,8 +927,6 @@ function attachEventListeners() {
 
         var handleMove = function(e){
             let touch = e.touches[0];
-            // console.log("touch move " + touch.clientX + " " + touch.clientY);
-            // console.log(touch.clientY, (firstY - dropSpaceY));
             
             if(touch.clientX > (firstX + minSpaceX)) {
                 firstX = touch.clientX;
