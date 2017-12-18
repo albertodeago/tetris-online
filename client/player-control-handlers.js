@@ -93,18 +93,34 @@ function attachEventListeners() {
             if(firstX && firstY) {
                 if(touch.clientX > (firstX + minSpaceX)) {
                     firstX = touch.clientX;
-                    handleModileRight(e);
+                    if(!player.invertedKeys) {
+                        handleModileRight(e);
+                    } else {
+                        handleModileLeft(e);
+                    }
                 } else if(touch.clientX < (firstX - minSpaceX)) {
                     firstX = touch.clientX;
-                    handleModileLeft(e);
+                    if(!player.invertedKeys) {
+                        handleModileLeft(e);
+                    } else {
+                        handleModileRight(e);
+                    }
                 } else if(touch.clientY > (firstY + minSpaceY)) {
                     firstY = touch.clientY;
-                    handleMobileDown(e);
+                    if(!player.invertedKeys) {
+                        handleMobileDown(e);
+                    } else {
+                        handleMobileSpaceBar(e);
+                    }                    
                 } else if(touch.clientY < (firstY - (dropSpaceY/2)) ) {
                     isDropping = true;                
                     if(touch.clientY < (firstY - dropSpaceY)) {
                         firstY = touch.clientY;
-                        handleMobileSpaceBar(e);
+                        if(!player.invertedKeys) {
+                            handleMobileSpaceBar(e);
+                        } else {
+                            handleMobileDown(e);
+                        }
                     }
                 } 
             }

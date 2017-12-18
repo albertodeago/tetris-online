@@ -119,7 +119,6 @@ class Player {
             }
 
             if(sweepObj.rows) {
-                // this.testDebuff();
                 this.sendDebuff();
             }
 
@@ -204,10 +203,10 @@ class Player {
 
     applyDebuff(debuffType) {
         let duration = 10000; // 10 sec debuff duration
-        
+        debuffType = "KEYS-INVERTED";
         if(debuffType === 'HASTE') {
-            duration = 20000;   // 20 sec of haste
-            const factor = 2;   // 2x of speed
+            // duration = 20000;   // 20 sec of haste
+            const factor = 2.5;   // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
             console.log("HASTE START", this.dropInterval);

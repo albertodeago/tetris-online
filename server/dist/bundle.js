@@ -504,7 +504,6 @@ class Player {
             }
 
             if(sweepObj.rows) {
-                // this.testDebuff();
                 this.sendDebuff();
             }
 
@@ -589,10 +588,10 @@ class Player {
 
     applyDebuff(debuffType) {
         let duration = 10000; // 10 sec debuff duration
-        
+        debuffType = "KEYS-INVERTED";
         if(debuffType === 'HASTE') {
-            duration = 20000;   // 20 sec of haste
-            const factor = 2;   // 2x of speed
+            // duration = 20000;   // 20 sec of haste
+            const factor = 2.5;   // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
             console.log("HASTE START", this.dropInterval);
@@ -945,18 +944,34 @@ function attachEventListeners() {
             if(firstX && firstY) {
                 if(touch.clientX > (firstX + minSpaceX)) {
                     firstX = touch.clientX;
-                    handleModileRight(e);
+                    if(!player.invertedKeys) {
+                        handleModileRight(e);
+                    } else {
+                        handleModileLeft(e);
+                    }
                 } else if(touch.clientX < (firstX - minSpaceX)) {
                     firstX = touch.clientX;
-                    handleModileLeft(e);
+                    if(!player.invertedKeys) {
+                        handleModileLeft(e);
+                    } else {
+                        handleModileRight(e);
+                    }
                 } else if(touch.clientY > (firstY + minSpaceY)) {
                     firstY = touch.clientY;
-                    handleMobileDown(e);
+                    if(!player.invertedKeys) {
+                        handleMobileDown(e);
+                    } else {
+                        handleMobileSpaceBar(e);
+                    }                    
                 } else if(touch.clientY < (firstY - (dropSpaceY/2)) ) {
                     isDropping = true;                
                     if(touch.clientY < (firstY - dropSpaceY)) {
                         firstY = touch.clientY;
-                        handleMobileSpaceBar(e);
+                        if(!player.invertedKeys) {
+                            handleMobileSpaceBar(e);
+                        } else {
+                            handleModileDown(e);
+                        }
                     }
                 } 
             }
