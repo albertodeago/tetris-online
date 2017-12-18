@@ -25,13 +25,21 @@ function attachEventListeners() {
             isMoving = true;
             isDropping = true;
             if(!player.gameOver && localTetris.isStarted) { 
-                player.drop();
+                const collided = player.drop();
+                if(collided) {
+                    // "reset" values to prevent multiple pieces to go down
+                    firstX = null;
+                    firstY = null;
+                }
             }
         }
         handleMobileSpaceBar = function(e) {
             isMoving = true;
             if(!player.gameOver && localTetris.isStarted) {
                 while(!player.drop()) {}
+                // "reset" values to prevent multiple pieces to go down
+                firstX = null;
+                firstY = null;
             }
         }
         handleMobileRotation = function() {
@@ -55,6 +63,12 @@ function attachEventListeners() {
         let isMoving = false;
         let isDropping = false;
         
+        /**
+         * touch start, if the element is not 'clickable' we save the coordinates of 
+         * the touch and then prevent the propagation of the event, otherwise
+         * just normal touch behviour
+         * @param {Event} e 
+         */
         var handleTouchStart = function(e) {
             if(!e.target.classList.contains('clickable')) {
                 firstX = e.touches[0].clientX;
@@ -76,22 +90,24 @@ function attachEventListeners() {
         var handleMove = function(e){
             let touch = e.touches[0];
             
-            if(touch.clientX > (firstX + minSpaceX)) {
-                firstX = touch.clientX;
-                handleModileRight(e);
-            } else if(touch.clientX < (firstX - minSpaceX)) {
-                firstX = touch.clientX;
-                handleModileLeft(e);
-            } else if(touch.clientY > (firstY + minSpaceY)) {
-                firstY = touch.clientY;
-                handleMobileDown(e);
-            } else if(touch.clientY < (firstY - (dropSpaceY/2)) ) {
-                isDropping = true;                
-                if(touch.clientY < (firstY - dropSpaceY)) {
+            if(firstX && firstY) {
+                if(touch.clientX > (firstX + minSpaceX)) {
+                    firstX = touch.clientX;
+                    handleModileRight(e);
+                } else if(touch.clientX < (firstX - minSpaceX)) {
+                    firstX = touch.clientX;
+                    handleModileLeft(e);
+                } else if(touch.clientY > (firstY + minSpaceY)) {
                     firstY = touch.clientY;
-                    handleMobileSpaceBar(e);
-                }
-            } 
+                    handleMobileDown(e);
+                } else if(touch.clientY < (firstY - (dropSpaceY/2)) ) {
+                    isDropping = true;                
+                    if(touch.clientY < (firstY - dropSpaceY)) {
+                        firstY = touch.clientY;
+                        handleMobileSpaceBar(e);
+                    }
+                } 
+            }
         }
 
         document.addEventListener('touchstart', handleTouchStart, {passive: false});
