@@ -7,8 +7,71 @@ function attachEventListeners() {
         isMobile = true;
     }
 
-    if(isMobile) {
+    if(!isMobile) {
 
+        const keys = [37, 39, 81, 38, 40, 32]    // left right q up down space
+        const invertedKeys = [39, 37, 81, 40, 38, 32]    // left right q up down space
+
+        function pressedUp(player, e) {
+            player.rotate(+1);
+        }
+        function pressedDown(player, e) {
+            if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
+                player.dropInterval = player.DROP_FAST;
+                player.drop();
+            } 
+            else 
+                player.dropInterval = player.DROP_SLOW;
+        }
+
+        const keyListener = e => {
+            [
+                keys
+            ].forEach( (key, index) => {
+                
+                if(!player.gameOver && localTetris.isStarted) { 
+
+                    if(player.invertedKeys)
+                        key = invertedKeys;
+
+                    if( e.type === 'keydown') {
+                        if(e.keyCode === key[0]) { 
+                            player.move(-1);
+                            e.preventDefault();
+                        }
+                        else if(e.keyCode === key[1]) { 
+                            player.move(+1);
+                            e.preventDefault();
+                        }
+                        else if(e.keyCode === key[2]) {
+                            player.rotate(-1);
+                            e.preventDefault();
+                        }
+                        else if(e.keyCode === key[3]) {
+                            pressedUp(player, e);
+                            e.preventDefault();
+                        }
+                        else if(e.keyCode === key[5]) {
+                            while(!player.drop()) { }
+                            e.preventDefault();
+                        }
+                    }
+                    
+                    if(e.keyCode === key[4]) {
+                        pressedDown(player, e);
+                        e.preventDefault();
+                    }
+                }
+            })
+        };
+
+        document.addEventListener('keydown', keyListener); 
+        document.addEventListener('keyup', keyListener);
+
+    } else {    
+
+        /******************* MOBILE CONTROLS ********************/
+        
         handleModileLeft = function(e) {
             isMoving = true;
             if(!player.gameOver && localTetris.isStarted && !isDropping) { 
@@ -129,67 +192,6 @@ function attachEventListeners() {
         document.addEventListener('touchstart', handleTouchStart, {passive: false});
         document.addEventListener('touchmove', handleMove, {passive: false});
         document.addEventListener('touchend', handleTouchEnd, {passive: false});
-
-    } else {
-
-        const keys = [37, 39, 81, 38, 40, 32]    // left right q up down space
-        const invertedKeys = [39, 37, 81, 40, 38, 32]    // left right q up down space
-
-        function pressedUp(player, e) {
-            player.rotate(+1);
-        }
-        function pressedDown(player, e) {
-            if(e.type === 'keydown' && player.dropInterval !== player.DROP_FAST) {
-                player.dropInterval = player.DROP_FAST;
-                player.drop();
-            } 
-            else 
-                player.dropInterval = player.DROP_SLOW;
-        }
-
-        const keyListener = e => {
-            [
-                keys
-            ].forEach( (key, index) => {
-                
-                if(!player.gameOver && localTetris.isStarted) { 
-
-                    if(player.invertedKeys)
-                        key = invertedKeys;
-
-                    if( e.type === 'keydown') {
-                        if(e.keyCode === key[0]) { 
-                            player.move(-1);
-                            e.preventDefault();
-                        }
-                        else if(e.keyCode === key[1]) { 
-                            player.move(+1);
-                            e.preventDefault();
-                        }
-                        else if(e.keyCode === key[2]) {
-                            player.rotate(-1);
-                            e.preventDefault();
-                        }
-                        else if(e.keyCode === key[3]) {
-                            pressedUp(player, e);
-                            e.preventDefault();
-                        }
-                        else if(e.keyCode === key[5]) {
-                            while(!player.drop()) { }
-                            e.preventDefault();
-                        }
-                    }
-                    
-                    if(e.keyCode === key[4]) {
-                        pressedDown(player, e);
-                        e.preventDefault();
-                    }
-                }
-            })
-        };
-
-        document.addEventListener('keydown', keyListener); 
-        document.addEventListener('keyup', keyListener);
 
     }
 }

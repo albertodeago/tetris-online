@@ -26,6 +26,7 @@ class Player {
 
         this.invertedKeys = false;
         this.rotatingPieces = false;
+        this.randomPieces = false;
 
         this.reset();
     }
@@ -50,7 +51,7 @@ class Player {
      * We re-create a piece randomly and position in the top center
      */
     reset() {
-        const pieces = 'ILJOTSZ';
+        let pieces = 'ILJOTSZ';
         this.matrix = this.createPiece(pieces[pieces.length * Math.random() | 0]);
         this.pos.y = 0;
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
@@ -104,7 +105,7 @@ class Player {
         this.dropCounter = 0;
         if(this.arena.collide(this)) {
             
-            this.dropInterval = this.DROP_SLOW;     // Fix attempt of weird bug
+            // this.dropInterval = this.DROP_SLOW;     // Fix attempt of weird bug // commented because it "removes" HASTE
             
             // update position
             this.pos.y--;
@@ -157,7 +158,7 @@ class Player {
      */
     changeSpeed(brokenRows) {
         this.dropInterval -= (2 * brokenRows);
-        this.DROP_SLOW = this.dropInterval; // maintain updated the DROP_SLOW constant
+        this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
         console.log("Speed increased", this.dropInterval);
     }
 
@@ -191,7 +192,8 @@ class Player {
             'KEYS-INVERTED',
             'ARENA-SWING',
             'ROTATING-PIECE',
-            'ARENA-MINI'
+            'ARENA-MINI',
+            'RANDOM-PIECES'
         ];
         const random = getRandomInt(0, debuffs.length);
         this.events.emit('send-debuff', debuffs[random]);
@@ -203,7 +205,9 @@ class Player {
 
     applyDebuff(debuffType) {
         let duration = 10000; // 10 sec debuff duration
-        debuffType = "KEYS-INVERTED";
+ 
+        // debuffType = "HASTE";
+ 
         if(debuffType === 'HASTE') {
             // duration = 20000;   // 20 sec of haste
             const factor = 2.5;   // 2x of speed
@@ -233,6 +237,9 @@ class Player {
             setTimeout( () => {
                 el.classList.remove('small-debuff');
             }, duration);
+        } else if(debuffType === 'RANDOM-PIECES') {
+            this.randomPieces = true;
+            setTimeout( () => { this.randomPieces = false; }, duration);
         }
 
         // debuff bar
@@ -252,48 +259,66 @@ class Player {
      * @param {String} type 
      */
     createPiece(type) {
-        if(type === 'T') {
-            return [
-                [0,0,0],
-                [7,7,7],
-                [0,7,0]
-            ]
-        } else if(type === 'O') {
-            return [
-                [6,6],
-                [6,6]
-            ];
-        } else if(type === 'L'){
-            return [
-                [0,5,0],
-                [0,5,0],
-                [0,5,5]
-            ];
-        } else if (type === 'J') {
-            return [
-                [0,4,0],
-                [0,4,0],
-                [4,4,0]
-            ];
-        } else if(type === 'I') {
-            return [
-                [0,3,0,0],
-                [0,3,0,0],
-                [0,3,0,0],
-                [0,3,0,0]
-            ];
-        } else if(type === 'S'){
-            return [
-                [0,2,2],
-                [2,2,0],
-                [0,0,0]
-            ];
-        } else if(type === 'Z') {
-            return [
-                [1,1,0],
-                [0,1,1],
-                [0,0,0]
-            ];
+
+        if(!this.randomPieces) {
+            if(type === 'T') {
+                return [
+                    [0,0,0],
+                    [7,7,7],
+                    [0,7,0]
+                ]
+            } else if(type === 'O') {
+                return [
+                    [6,6],
+                    [6,6]
+                ];
+            } else if(type === 'L'){
+                return [
+                    [0,5,0],
+                    [0,5,0],
+                    [0,5,5]
+                ];
+            } else if (type === 'J') {
+                return [
+                    [0,4,0],
+                    [0,4,0],
+                    [4,4,0]
+                ];
+            } else if(type === 'I') {
+                return [
+                    [0,3,0,0],
+                    [0,3,0,0],
+                    [0,3,0,0],
+                    [0,3,0,0]
+                ];
+            } else if(type === 'S'){
+                return [
+                    [0,2,2],
+                    [2,2,0],
+                    [0,0,0]
+                ];
+            } else if(type === 'Z') {
+                return [
+                    [1,1,0],
+                    [0,1,1],
+                    [0,0,0]
+                ];
+            }
+        } else {
+            let counter = 8;
+            let piece = [[],[],[]];
+            while(counter >= 0) {
+                const empty = Math.random() < 0.5;
+                const num = empty ? 0 : getRandomInt(1,8);
+
+                const row =  Math.floor(counter / 3);
+                const column = counter % 3;
+                piece[row][column] = num;
+                
+                counter--;
+            }
+            
+            return piece;
         }
     }
 }
