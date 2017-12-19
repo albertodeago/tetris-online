@@ -402,7 +402,6 @@ class Player {
         this.matrix = null;            
         this.dropCounter = 0;
         this.dropInterval = this.DROP_SLOW;    // ms
-        // this.initialDropInterval = this.dropInterval;
 
         this.tetris = tetris;
         this.arena = tetris.arena;
@@ -544,7 +543,6 @@ class Player {
      */
     changeSpeed(brokenRows) {
         this.dropInterval -= (2 * brokenRows);
-        // this.initialDropInterval-= (2 * brokenRows); // maintain updated the copy of the speed
         this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
         console.log("Speed increased", this.dropInterval);
     }
@@ -593,17 +591,16 @@ class Player {
     applyDebuff(debuffType) {
         let duration = 10000; // 10 sec debuff duration
  
-        debuffType = "HASTE";
+        // debuffType = "HASTE";
  
         if(debuffType === 'HASTE') {
             // duration = 20000;   // 20 sec of haste
-            const factor = 2;   // 2x of speed
+            const factor = 2.5;    // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
             console.log("HASTE START", this.dropInterval);
             setTimeout(() => {
                 this.dropInterval *= factor;
-                // this.dropInterval = this.initialDropInterval;
                 this.DROP_FAST *= factor;    
                 console.log('HASTE ENEDED', this.dropInterval);
             }, duration)
