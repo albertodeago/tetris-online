@@ -210,7 +210,7 @@ class Player {
  
         if(debuffType === 'HASTE') {
             // duration = 20000;   // 20 sec of haste
-            const factor = 2.5;   // 2x of speed
+            const factor = 2.5;    // 2x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
             console.log("HASTE START", this.dropInterval);
