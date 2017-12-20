@@ -1,11 +1,13 @@
 class Tetris {
 
-    constructor(element) {
+    constructor(element, id) {
         this.element = element;
         this.canvas = element.querySelector('.tetris');;
         this.context = this.canvas.getContext('2d');
         this.context.scale(30,30);
         
+        this.id = id;
+
         this.arena = new Arena(12, 20);
         this.player = new Player(this);
 

@@ -1,11 +1,11 @@
 body {
     position:relative;
-    /* display: flex; */
     background: #202020;
     color: #f0f0f0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 2em;
     text-align: center;
+    margin: 0;
 }
 
 #game-wrapper {
@@ -89,6 +89,18 @@ body {
 
 
 /********************** PLAYERS *****************/
+#local-player {
+    width: 50%;
+    height: 100vh;
+}
+#other-players {
+    display: inline-flex;
+    width: 50%;
+    flex-flow: row;
+    flex-wrap: wrap;
+    height: 100vh;
+}
+
 .players-wrapper {
     display: flex;
     flex-flow: row wrap;
@@ -98,11 +110,13 @@ body {
 
 .player {
     flex: 1 1 auto;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    height: auto;
 }
 
 .local {
-    flex: 1 0 500px;
+    /* flex: 1 0 500px; */
+    height: 85%;
 }
 
 .player.local .tetris {
