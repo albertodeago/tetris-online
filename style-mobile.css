@@ -14,9 +14,19 @@
         display: block;
     }
 
+    #local-player {
+        width: 65%;
+        display: inline-block;
+        vertical-align: top;
+    }
+    #other-players {
+        width: 33%;
+        flex-flow: column;
+        flex-wrap: nowrap;
+        overflow-y: scroll;
+    }
+
     .player.local {
-        /* width: 65vw;
-        height: 80vh; */
         width: 65vmin;
         height: 100vmin;
 
@@ -25,10 +35,8 @@
     }
 
     .player {
-        /* width: 30vw;
-        height: 30vh; */
-        width: 25vmin;
-        height: 40vmin;
+        /* width: 25vmin;
+        height: 40vmin; */
 
         display: inline-block;
         flex: none;

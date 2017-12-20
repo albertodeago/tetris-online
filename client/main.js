@@ -14,6 +14,11 @@ if (nameFromCookie) {
     document.getElementById('input-player-name').value = nameFromCookie;
 }
 
+// set mobile flag
+window.isMobile = false;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    window.isMobile = true;
+}
 
 function startGame() {    
     // send a message to other players to start the game

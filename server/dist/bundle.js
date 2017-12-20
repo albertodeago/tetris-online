@@ -64,15 +64,26 @@ class TetrisManager {
     recalculateTetriHeights() {
         let otherPlayersTetri = document.querySelectorAll('.player:not(.local)');
         let newHeight = '';
-        if(otherPlayersTetri.length === 1) {    // TODO move this logic into a "ViewHandler" function
-            newHeight = '85%';
-        } else if(otherPlayersTetri.length < 5) {
-            newHeight = '50%';
-        } else if(otherPlayersTetri.length < 10) {
-            newHeight = '33%';
+        
+        if(window.isMobile) {
+            if(otherPlayersTetri.length < 3) {    // TODO move this logic into a "ViewHandler" function
+                newHeight = '40%';
+            } else {
+                newHeight = '33%';
+                // newHeight = Math.floor(100 / otherPlayersTetri.length) + '%';
+            }
         } else {
-            newHeight = '30%';
+            if(otherPlayersTetri.length === 1) {    // TODO move this logic into a "ViewHandler" function
+                newHeight = '85%';
+            } else if(otherPlayersTetri.length < 5) {
+                newHeight = '50%';
+            } else if(otherPlayersTetri.length < 10) {
+                newHeight = '33%';
+            } else {
+                newHeight = '30%';
+            }
         }
+        
         otherPlayersTetri.forEach( el => el.style.height = newHeight );
     }
 }
@@ -905,17 +916,12 @@ class Tetris {
 }
 function attachEventListeners() {
 
-    let isMobile = false;
     const player = localTetris.player;
 
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        isMobile = true;
-    }
+    if(!window.isMobile) {
 
-    if(!isMobile) {
-
-        const keys = [37, 39, 81, 38, 40, 32]    // left right q up down space
-        const invertedKeys = [39, 37, 81, 40, 38, 32]    // left right q up down space
+        const keys = [37, 39, 81, 38, 40, 32]            // left  right q up   down space
+        const invertedKeys = [39, 37, 81, 40, 38, 32]    // right left  q down up   space
 
         function pressedUp(player, e) {
             player.rotate(+1);
@@ -925,8 +931,9 @@ function attachEventListeners() {
                 player.dropInterval = player.DROP_FAST;
                 player.drop();
             } 
-            else 
+            else {
                 player.dropInterval = player.DROP_SLOW;
+            }
         }
 
         const keyListener = e => {
@@ -1116,6 +1123,11 @@ if (nameFromCookie) {
     document.getElementById('input-player-name').value = nameFromCookie;
 }
 
+// set mobile flag
+window.isMobile = false;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    window.isMobile = true;
+}
 
 function startGame() {    
     // send a message to other players to start the game

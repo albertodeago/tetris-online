@@ -1,16 +1,11 @@
 function attachEventListeners() {
 
-    let isMobile = false;
     const player = localTetris.player;
 
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        isMobile = true;
-    }
+    if(!window.isMobile) {
 
-    if(!isMobile) {
-
-        const keys = [37, 39, 81, 38, 40, 32]    // left right q up down space
-        const invertedKeys = [39, 37, 81, 40, 38, 32]    // left right q up down space
+        const keys = [37, 39, 81, 38, 40, 32]            // left  right q up   down space
+        const invertedKeys = [39, 37, 81, 40, 38, 32]    // right left  q down up   space
 
         function pressedUp(player, e) {
             player.rotate(+1);
@@ -20,8 +15,9 @@ function attachEventListeners() {
                 player.dropInterval = player.DROP_FAST;
                 player.drop();
             } 
-            else 
+            else {
                 player.dropInterval = player.DROP_SLOW;
+            }
         }
 
         const keyListener = e => {

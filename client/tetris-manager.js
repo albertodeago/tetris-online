@@ -64,15 +64,26 @@ class TetrisManager {
     recalculateTetriHeights() {
         let otherPlayersTetri = document.querySelectorAll('.player:not(.local)');
         let newHeight = '';
-        if(otherPlayersTetri.length === 1) {    // TODO move this logic into a "ViewHandler" function
-            newHeight = '85%';
-        } else if(otherPlayersTetri.length < 5) {
-            newHeight = '50%';
-        } else if(otherPlayersTetri.length < 10) {
-            newHeight = '33%';
+        
+        if(window.isMobile) {
+            if(otherPlayersTetri.length < 3) {    // TODO move this logic into a "ViewHandler" function
+                newHeight = '40%';
+            } else {
+                newHeight = '33%';
+                // newHeight = Math.floor(100 / otherPlayersTetri.length) + '%';
+            }
         } else {
-            newHeight = '30%';
+            if(otherPlayersTetri.length === 1) {    // TODO move this logic into a "ViewHandler" function
+                newHeight = '85%';
+            } else if(otherPlayersTetri.length < 5) {
+                newHeight = '50%';
+            } else if(otherPlayersTetri.length < 10) {
+                newHeight = '33%';
+            } else {
+                newHeight = '30%';
+            }
         }
+        
         otherPlayersTetri.forEach( el => el.style.height = newHeight );
     }
 }
