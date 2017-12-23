@@ -84,6 +84,9 @@ class Tetris {
      */
     run() {
         document.getElementById('waiting-game').style.display = "block";
+        let waitingLabelEl = document.getElementById('waiting-label');
+        waitingLabelEl.classList.add('mdl-color-text--accent');
+        waitingLabelEl.style.fontSize = '35px;';
         document.getElementById('start-game-btn').style.display = "none";
         const maxTime = 7;
         const secondsToWait = [1,2,3,4,5,6,7];

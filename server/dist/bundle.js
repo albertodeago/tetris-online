@@ -304,7 +304,7 @@ class ConnectionManager {
         }
 
         if(stillPlaying.length === 1) { // that's the winner!
-            document.getElementById('winner-label').innerText = "Winner: " + stillPlaying[0].name;
+            document.getElementById('winner-label').innerText = " " + stillPlaying[0].name;
             document.getElementById('restart-game-container').style.display = "block";
 
             if(stillPlaying[0] === this.localTetris.player){
@@ -628,6 +628,7 @@ class Player {
         let duration = 10000; // 10 sec debuff duration
  
         // debuffType = "HASTE";
+        document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "block";
  
         if(debuffType === 'HASTE') {
             // duration = 20000;   // 20 sec of haste
@@ -670,6 +671,7 @@ class Player {
         // timeout to stop the debuff bar
         setTimeout( () => {
             debuffBar.classList.remove('debuff-' + duration/1000);
+            document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "none";
         }, duration);
         
     }
@@ -829,6 +831,9 @@ class Tetris {
      */
     run() {
         document.getElementById('waiting-game').style.display = "block";
+        let waitingLabelEl = document.getElementById('waiting-label');
+        waitingLabelEl.classList.add('mdl-color-text--accent');
+        waitingLabelEl.style.fontSize = '35px;';
         document.getElementById('start-game-btn').style.display = "none";
         const maxTime = 7;
         const secondsToWait = [1,2,3,4,5,6,7];
@@ -1045,7 +1050,7 @@ function attachEventListeners() {
          * @param {Event} e 
          */
         var handleTouchStart = function(e) {
-            if(!e.target.classList.contains('clickable')) {
+            if(!e.target.classList.contains('clickable') && !e.target.classList.contains('mdl-button__ripple-container')) {
                 firstX = e.touches[0].clientX;
                 firstY = e.touches[0].clientY;
                 e.preventDefault();
@@ -1127,7 +1132,11 @@ if (nameFromCookie) {
 window.isMobile = false;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     window.isMobile = true;
+
+    // document.getElementById('controls-desktop').style.display = "none";
+    // document.getElementById('controls-mobile').style.display = "block";
 }
+
 
 function startGame() {    
     // send a message to other players to start the game

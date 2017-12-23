@@ -6,6 +6,7 @@ body {
     font-size: 2em;
     text-align: center;
     margin: 0;
+    line-height: initial;
 }
 
 #game-wrapper {
@@ -21,69 +22,64 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0, 0.75);
+    background: rgba(0,0,0, 0.9);
 }
 .start-game-btn {
     display: none;
-    position: absolute;
-    top: calc(50% - 40px);
-    left: calc(50% - 130px);
-    padding: 30px;
-    border-radius: 20px;
-    border: 2px solid white;
-    cursor: pointer;
 }
 
 /***** WAITING PANEL *****/
 .waiting-game {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 25px;
+    right: 25px;
     bottom: 0;
+    font-size: 30px;
+}
+.game-title {
+    padding: 30px 0;
+    font-size: 50px;
 }
 .waiting-label {
-    position: absolute;
-    top: calc(50% - 40px);
-    left: calc(50% - 305px);
+    height: 50px;
+    margin: 50px 0 20px;
 }
 .controls-panel {
-    background: rgba(255,255,255,0.25);
     position: absolute;
-    top: 0;
-    left: 70%;
-    right: 0;
-    bottom: 0;
+    bottom: 25px;
+    text-align: left;
 }
-.controls-header {
-    margin-bottom: 40px;
+.controls-title {
     font-size: 40px;
+    margin-bottom: 15px;
 }
-.controls-text {
-    font-size: 25px;
+
+#controls-mobile {
+    display: none;
 }
-.input-player-name {    
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid white;
-    font-size: 23px;
-    color: white;
-    text-align: center;
-    margin-bottom: 20px;
+
+.control-label {
+    display: inline-block;
+    width: 130px;
 }
 /************************************************/
 
 /***************** RESTART GAME *****************/
 #restart-game-container {
     display: none;
+    z-index: 2;
 }
-#winner-label {
-    position: absolute;
-    top: calc(50% - 100px);
-    left: calc(50% - 305px);
+.winner-wrapper {
+    width: 100%;
+}
+#winner {
+    font-size: 55px;
+    margin-bottom: 20px; 
 }
 #restart-game-btn {
     display: none;
+    margin: 0 auto;
 }
 /************************************************/
 
@@ -139,6 +135,7 @@ body {
     height: 5px;
     background: red;
     width: 0%;
+    margin: 20px;
 }
 .debuff-10 {
     animation: debuff-bar 10s infinite linear;
@@ -147,3 +144,64 @@ body {
 .game-over {
     opacity: 0.3;
 }
+
+/*********** DEBUFFS ******************/
+.debuff-container {
+    position: relative;
+}
+.debuff-icon {
+    display: none;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    left: calc(50% - 50px);
+    top: 12px;
+}
+#debuff-haste {
+    background: url('./images/haste.png') no-repeat center center;
+}
+#debuff-keys-inverted {
+    background: url('./images/keys-inverted.png') no-repeat center center;
+}
+#debuff-arena-swing {
+    background: url('./images/arena-swing.png') no-repeat center center;
+}
+#debuff-rotating-piece {
+    background: url('./images/rotating-piece.png') no-repeat center center;
+}
+#debuff-arena-mini {
+    background: url('./images/arena-mini.png') no-repeat center center;
+}
+#debuff-random-pieces {
+    background: url('./images/random-pieces.png') no-repeat center center;
+}
+
+/*********** HELPER CLASSES ****************/
+.my-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/*********** OVERRIDE OF MATERIAL DESIGN **************/
+.mdl-button {
+    height: 70px;
+    min-width: 200px;
+    padding: 0 30px;
+    font-size: 34px;
+}
+.mdl-textfield {
+    width: 100%;;
+}
+.mdl-textfield__input, .mdl-textfield__label {
+    font-size: 35px;
+    text-align: center;
+}
+.mdl-textfield__label {
+    color: rgba(255,255,255, 0.25);
+}
+.mdl-progress {
+    margin: 15px auto;
+}
+

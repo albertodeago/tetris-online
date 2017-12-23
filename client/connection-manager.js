@@ -215,7 +215,7 @@ class ConnectionManager {
         }
 
         if(stillPlaying.length === 1) { // that's the winner!
-            document.getElementById('winner-label').innerText = "Winner: " + stillPlaying[0].name;
+            document.getElementById('winner-label').innerText = " " + stillPlaying[0].name;
             document.getElementById('restart-game-container').style.display = "block";
 
             if(stillPlaying[0] === this.localTetris.player){

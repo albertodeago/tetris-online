@@ -207,6 +207,7 @@ class Player {
         let duration = 10000; // 10 sec debuff duration
  
         // debuffType = "HASTE";
+        document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "block";
  
         if(debuffType === 'HASTE') {
             // duration = 20000;   // 20 sec of haste
@@ -249,6 +250,7 @@ class Player {
         // timeout to stop the debuff bar
         setTimeout( () => {
             debuffBar.classList.remove('debuff-' + duration/1000);
+            document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "none";
         }, duration);
         
     }

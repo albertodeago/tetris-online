@@ -36,6 +36,10 @@ gulp.task('copy-style-animations', function () {
     gulp.src('./style-animations.css')
         .pipe(gulp.dest('./server/dist/'));
 });
+gulp.task('copy-images', function() {
+    gulp.src('./images/*.png')
+        .pipe(gulp.dest('./server/dist/images/'));
+});
 
 
 /**
@@ -46,6 +50,7 @@ gulp.task('bundle', () => {
         'bundle-js', 
         'copy-style', 
         'copy-style-mobile', 
-        'copy-style-animations'
+        'copy-style-animations',
+        'copy-images'
     );
 });

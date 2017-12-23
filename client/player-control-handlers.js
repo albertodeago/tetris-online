@@ -129,7 +129,7 @@ function attachEventListeners() {
          * @param {Event} e 
          */
         var handleTouchStart = function(e) {
-            if(!e.target.classList.contains('clickable')) {
+            if(!e.target.classList.contains('clickable') && !e.target.classList.contains('mdl-button__ripple-container')) {
                 firstX = e.touches[0].clientX;
                 firstY = e.touches[0].clientY;
                 e.preventDefault();

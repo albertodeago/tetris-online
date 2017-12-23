@@ -1,12 +1,22 @@
 @media only screen and (max-width: 1024px) {
     
     body {
-        /* height: 100%;
-        width: 100%; */
         height: 100vh; 
         width: 100vw;
-        
         cursor: pointer;
+    }
+
+    #controls-mobile {
+        display: block;
+    }
+    #controls-desktop {
+        display: none;
+    }
+    .controls-panel {
+        bottom: 150px;
+    }
+    .control-label {
+        width: 230px;
     }
 
     .players-wrapper {
@@ -35,9 +45,6 @@
     }
 
     .player {
-        /* width: 25vmin;
-        height: 40vmin; */
-
         display: inline-block;
         flex: none;
 

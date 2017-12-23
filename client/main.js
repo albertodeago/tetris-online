@@ -18,7 +18,11 @@ if (nameFromCookie) {
 window.isMobile = false;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     window.isMobile = true;
+
+    // document.getElementById('controls-desktop').style.display = "none";
+    // document.getElementById('controls-mobile').style.display = "block";
 }
+
 
 function startGame() {    
     // send a message to other players to start the game

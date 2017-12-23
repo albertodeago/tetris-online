@@ -9,6 +9,12 @@ const INDEX = path.join(__dirname, '../index.html');
 const STYLE = path.join(__dirname, '../style.css');
 const STYLE_MOBILE = path.join(__dirname, '../style-mobile.css');
 const STYLE_ANIMATIONS = path.join(__dirname, '../style-animations.css');
+const DEBUFF_HASTE_IMG = path.join(__dirname, '../images/haste.png');
+const DEBUFF_KEYS_INVERTED_IMG = path.join(__dirname, '../images/keys-inverted.png');
+const DEBUFF_ARENA_SWING_IMG = path.join(__dirname, '../images/arena-swing.png');
+const DEBUFF_ROTATING_PIECE_IMG = path.join(__dirname, '../images/rotating-piece.png');
+const DEBUFF_ARENA_MINI_IMG = path.join(__dirname, '../images/arena-mini.png');
+const DEBUFF_RANDOM_PIECES_IMG = path.join(__dirname, '../images/random-pieces.png');
 const BUNDLE = path.join(__dirname + '/dist/bundle.js');
 
 const httpServer = express()
@@ -16,6 +22,12 @@ const httpServer = express()
     .use('/dist/style.css', (req, res) => res.sendFile(STYLE))
     .use('/dist/style-mobile.css', (req, res) => res.sendFile(STYLE_MOBILE))
     .use('/dist/style-animations.css', (req, res) => res.sendFile(STYLE_ANIMATIONS))
+    .use('/dist/images/haste.png', (req, res) => res.sendFile(DEBUFF_HASTE_IMG))
+    .use('/dist/images/keys-inverted.png', (req, res) => res.sendFile(DEBUFF_KEYS_INVERTED_IMG))
+    .use('/dist/images/arena-swing.png', (req, res) => res.sendFile(DEBUFF_ARENA_SWING_IMG))
+    .use('/dist/images/rotating-piece.png', (req, res) => res.sendFile(DEBUFF_ROTATING_PIECE_IMG))
+    .use('/dist/images/arena-mini.png', (req, res) => res.sendFile(DEBUFF_ARENA_MINI_IMG))
+    .use('/dist/images/random-pieces.png', (req, res) => res.sendFile(DEBUFF_RANDOM_PIECES_IMG))
     .use('/dist/bundle.js', (req, res) => res.sendFile(BUNDLE))
     .listen(PORT, () => console.log('Listening on ' + PORT));
 

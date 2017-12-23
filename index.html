@@ -3,6 +3,14 @@
     <head>
         <title>Tetris</title>
         <meta name="viewport" content="user-scalable=0"> 
+        
+        <!-- Material Design Lite imports -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-light_blue.min.css"/>
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+        <!-- End Material Design Lite -->
+
         <link href="/dist/style.css" rel="stylesheet">
         <link href="/dist/style-mobile.css" rel="stylesheet">
         <link href="/dist/style-animations.css" rel="stylesheet">
@@ -13,15 +21,45 @@
         <div id="game-wrapper">
             
             <div id="start-game-container" class="modal-bkg">
-                <div id="start-game-btn" class="start-game-btn clickable" onclick="startGame()">Start Game</div>
-                
+                <!-- <div id="start-game-btn" class="start-game-btn clickable" onclick="startGame()">Start Game</div> -->
+                <button id="start-game-btn" class="start-game-btn clickable my-centered mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"  onclick="startGame()">
+                    Start Game
+                </button>
+
                 <div id="waiting-game" class="waiting-game">
-                    <div id="waiting-label" class="waiting-label">Wait room owner to start the game...</div>
+                    <div class="game-title">This is a multiplayer tetris game toy project</div>
+                    <div class="game-explanation">Play as a normal tetris game, but beware, everytime a player
+                        clear a line, another random player will receive a random handicap for a while.
+                    </div>
+
+                    <div id="waiting-label" class="waiting-label">
+                        <div>Wait room owner to start the game...</div>
+                        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                    </div>
+
+                    <!-- <input type="text" id="input-player-name" class="input-player-name clickable"/> -->
+                    <form onsubmit="return false;"> <!-- prevent form submission -->
+                        <div class="mdl-textfield mdl-js-textfield">
+                          <input id="input-player-name" class="mdl-textfield__input clickable mdl-color-text--indigo-A400" type="text">
+                          <label class="mdl-textfield__label" for="sample1">Insert your player nickname</label>
+                        </div>
+                    </form>
+
                     <div class="controls-panel">
-                        <div class="controls-label controls-header">This is a simple tetris multiplayer game</div>
-                        <input type="text" id="input-player-name" class="input-player-name clickable"/>
-                        <div class="controls-label controls-text">
-                            Controls are LEFT RIGHT UP DOWN arrows and SPACEBAR to drop immediately the piece
+                        <div class="controls-title">CONTROLS</div>
+                        <div id="controls-desktop">
+                            <span class="control-label">LEFT</span> move the piece left by 1<br>
+                            <span class="control-label">RIGHT</span> move the piece right by 1<br>
+                            <span class="control-label">DOWN</span> move the piece down by 1<br>
+                            <span class="control-label">SPACE</span> drop the piece down<br>
+                            <span class="control-label">UP</span> rotate the piece
+                        </div>
+                        <div id="controls-mobile">
+                            <span class="control-label">SWIPE LEFT</span> move the piece left by 1<br>
+                            <span class="control-label">SWIPE RIGHT</span> move the piece right by 1<br>
+                            <span class="control-label">SWIPE DOWN</span> move the piece down by 1<br>
+                            <span class="control-label">SWIPE UP</span> drop the piece down<br>
+                            <span class="control-label">TAP</span> rotate the piece
                         </div>
                     </div>
                 </div>
@@ -29,8 +67,16 @@
             </div>
             
             <div id="restart-game-container" class="modal-bkg">
-                <div id="winner-label"></div>
-                <div id="restart-game-btn" class="start-game-btn clickable" onclick="restartGame()">Restart Game</div>
+                <div class="my-centered winner-wrapper">
+                    <div id="winner">
+                        <span class="winner-title">Winner:</span>
+                        <span id="winner-label" class="winner-label mdl-color-text--indigo-A400"></span>
+                    </div>
+                    <!-- <div id="restart-game-btn" class="start-game-btn clickable" onclick="restartGame()">Restart Game</div> -->
+                    <button id="restart-game-btn" class="start-game-btn clickable mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="restartGame()">
+                        Retart Game
+                    </button>
+                </div>
             </div>
 
             <div id="players-wrapper" class="players-wrapper">
@@ -39,7 +85,17 @@
                         <div class="name"></div>
                         <div class="score"></div>
                         <canvas class="tetris" width="360" height="600"></canvas>
-                        <div class="debuff-bar"></div>
+                        
+                        <div class="debuff-container">
+                            <div id="debuff-haste" class="debuff-icon"></div>
+                            <div id="debuff-keys-inverted" class="debuff-icon"></div>
+                            <div id="debuff-arena-swing" class="debuff-icon"></div>
+                            <div id="debuff-rotating-piece" class="debuff-icon"></div>
+                            <div id="debuff-arena-mini" class="debuff-icon"></div>
+                            <div id="debuff-random-pieces" class="debuff-icon"></div>
+                            <div class="debuff-bar"></div>
+                        </div>
+
                     </div>
                 </template>
 
