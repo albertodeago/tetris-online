@@ -88,6 +88,12 @@ class Tetris {
         waitingLabelEl.classList.add('mdl-color-text--accent');
         waitingLabelEl.style.fontSize = '35px;';
         document.getElementById('start-game-btn').style.display = "none";
+
+        // check if it's a single player game
+        if(tetrisManager.instances.size === 1) {
+            connectionManager.debuffForSinglePlayerGame();
+        }
+
         const maxTime = 7;
         const secondsToWait = [1,2,3,4,5,6,7];
         this.showRemainingTime(maxTime);
