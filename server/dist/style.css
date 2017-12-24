@@ -137,8 +137,17 @@ body {
     width: 0%;
     margin: 20px;
 }
-.debuff-10 {
-    animation: debuff-bar 10s infinite linear;
+.debuff-5 {
+    animation: debuff-bar 5s infinite linear;
+}
+.debuff-11 {
+    animation: debuff-bar 11s infinite linear;
+}
+.debuff-17 {
+    animation: debuff-bar 17s infinite linear;
+}
+.debuff-25 {
+    animation: debuff-bar 25s infinite linear;
 }
 
 .game-over {

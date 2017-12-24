@@ -156,10 +156,11 @@ class ConnectionManager {
                 fragment: 'game'
             });
         });
-        player.events.listen('send-debuff', (val) => {
+        player.events.listen('send-debuff', (debuff) => {
             this.send({
                 type: 'send-debuff',
-                debuffType: val
+                debuffType: debuff.type,
+                duration: debuff.duration
             });
         });
         player.events.listen('restart-game', () => {
@@ -282,7 +283,7 @@ class ConnectionManager {
             // } else {
             //     targettedPeer.player.applyDebuff(data.debuffType);
             // }
-            this.localTetris.player.applyDebuff(data.debuffType);
+            this.localTetris.player.applyDebuff(data);
         }
     }
 
@@ -541,7 +542,7 @@ class Player {
             }
 
             if(sweepObj.rows) {
-                this.sendDebuff();
+                this.sendDebuff(sweepObj.rows);
             }
 
             this.events.emit('score', this.score);
@@ -607,7 +608,7 @@ class Player {
             matrix.reverse();
     }
 
-    sendDebuff() {
+    sendDebuff(brokenRows) {
         const debuffs = [
             'HASTE',
             'KEYS-INVERTED',
@@ -616,23 +617,28 @@ class Player {
             'ARENA-MINI',
             'RANDOM-PIECES'
         ];
+        const durations = [0, 5000, 11000, 17000, 25000];
         const random = getRandomInt(0, debuffs.length);
-        this.events.emit('send-debuff', debuffs[random]);
+        let debuff = {
+            type: debuffs[random],
+            duration: durations[brokenRows]
+        }
+        this.events.emit('send-debuff', debuff);
     }
 
     askRestartGame() {
         this.events.emit('restart-game');
     }
 
-    applyDebuff(debuffType) {
-        let duration = 10000; // 10 sec debuff duration
- 
-        // debuffType = "HASTE";
+    applyDebuff(debuff) {
+ console.log("received a debuff", debuff);
+        let debuffType = debuff.debuffType;
+        let duration = debuff.duration;
+
         document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "block";
  
         if(debuffType === 'HASTE') {
-            // duration = 20000;   // 20 sec of haste
-            const factor = 2.5;    // 2x of speed
+            const factor = 2.5;    // 2.5x of speed
             this.dropInterval /= factor;
             this.DROP_FAST /= factor;
             console.log("HASTE START", this.dropInterval);
@@ -730,15 +736,24 @@ class Player {
         } else {
             let counter = 8;
             let piece = [[],[],[]];
+            let atLeastOne = false;
             while(counter >= 0) {
                 const empty = Math.random() < 0.5;
                 const num = empty ? 0 : getRandomInt(1,8);
+
+                if(!empty) {
+                    atLeastOne = true;
+                }
 
                 const row =  Math.floor(counter / 3);
                 const column = counter % 3;
                 piece[row][column] = num;
                 
                 counter--;
+            }
+
+            if(!atLeastOne) {   // all empty, must insert at least 1 square
+                piece[0][0] = 1;
             }
             
             return piece;

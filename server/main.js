@@ -183,6 +183,7 @@ server.on('connection', conn => {
             const msgToSend = {
                 type: 'apply-debuff',
                 debuffType: data.debuffType,
+                duration: data.duration
                 // targettedClient: targettedClient.id
             };
             // client.superBroadcast(msgToSend);

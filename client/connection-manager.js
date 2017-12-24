@@ -67,10 +67,11 @@ class ConnectionManager {
                 fragment: 'game'
             });
         });
-        player.events.listen('send-debuff', (val) => {
+        player.events.listen('send-debuff', (debuff) => {
             this.send({
                 type: 'send-debuff',
-                debuffType: val
+                debuffType: debuff.type,
+                duration: debuff.duration
             });
         });
         player.events.listen('restart-game', () => {
@@ -193,7 +194,7 @@ class ConnectionManager {
             // } else {
             //     targettedPeer.player.applyDebuff(data.debuffType);
             // }
-            this.localTetris.player.applyDebuff(data.debuffType);
+            this.localTetris.player.applyDebuff(data);
         }
     }
 
