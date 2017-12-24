@@ -1,5 +1,5 @@
 # tetris-online
-A simple tetris game playable online via WebSocket. Toy project to learn about websocket and made because I always loved tetris.
+A multiplayer tetris game playable online via WebSocket with some addings to make the game a bit more funny. Toy project made to learn about websocket and because I always loved tetris.
 
 # Demo
 https://multiplayer-tetris-battle.herokuapp.com/index.html
