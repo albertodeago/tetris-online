@@ -131,6 +131,11 @@ body {
     height: 50px;
 }
 
+.game-over {
+    opacity: 0.3;
+}
+
+/*********** DEBUFFS ******************/
 .debuff-bar {
     height: 5px;
     background: red;
@@ -150,21 +155,15 @@ body {
     animation: debuff-bar 25s infinite linear;
 }
 
-.game-over {
-    opacity: 0.3;
-}
-
-/*********** DEBUFFS ******************/
 .debuff-container {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .debuff-icon {
     display: none;
-    position: absolute;
     height: 100px;
     width: 100px;
-    left: calc(50% - 50px);
-    top: 12px;
 }
 #debuff-haste {
     background: url('./images/haste.png') no-repeat center center;

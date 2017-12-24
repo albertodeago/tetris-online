@@ -304,14 +304,38 @@ class ConnectionManager {
             stillPlaying.push(this.localTetris.player);
         }
 
-        if(stillPlaying.length === 1) { // that's the winner!
-            document.getElementById('winner-label').innerText = " " + stillPlaying[0].name;
+        if(stillPlaying.length < 2) { // one or zero player, there is a winner!
+            const winnerName = stillPlaying.length ? stillPlaying[0].name : this.localTetris.player.name;
+            document.getElementById('winner-label').innerText = " " + winnerName;
             document.getElementById('restart-game-container').style.display = "block";
 
             if(stillPlaying[0] === this.localTetris.player){
                 document.getElementById('restart-game-btn').style.display = "block";
             }
         }
+    }
+
+    debuffForSinglePlayerGame() {
+        const debuffInterval = 40000;
+        const debuffs = [
+            'HASTE',
+            'KEYS-INVERTED',
+            'ARENA-SWING',
+            'ROTATING-PIECE',
+            'ARENA-MINI',
+            'RANDOM-PIECES'
+        ];
+        const durations = [0, 5000, 11000, 17000, 25000];
+        window.setTimeout( () => {
+            const debuffType = debuffs[getRandomInt(0, debuffs.length)];
+            const duration = durations[getRandomInt(1, durations.length)];
+            const debuff = {
+                debuffType: debuffType,
+                duration: duration
+            };
+            this.localTetris.player.applyDebuff(debuff);
+            this.debuffForSinglePlayerGame();
+        }, debuffInterval);
     }
     
 }
@@ -631,7 +655,6 @@ class Player {
     }
 
     applyDebuff(debuff) {
- console.log("received a debuff", debuff);
         let debuffType = debuff.debuffType;
         let duration = debuff.duration;
 
@@ -850,6 +873,12 @@ class Tetris {
         waitingLabelEl.classList.add('mdl-color-text--accent');
         waitingLabelEl.style.fontSize = '35px;';
         document.getElementById('start-game-btn').style.display = "none";
+
+        // check if it's a single player game
+        if(tetrisManager.instances.size === 1) {
+            connectionManager.debuffForSinglePlayerGame();
+        }
+
         const maxTime = 7;
         const secondsToWait = [1,2,3,4,5,6,7];
         this.showRemainingTime(maxTime);
