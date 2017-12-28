@@ -1046,7 +1046,7 @@ Particle.prototype.attract = function(x, y) {
 
 Particle.prototype.draw = function() {
     this.ctx.strokeStyle = '#ffffff';
-    this.ctx.lineWidth = 2;
+    this.ctx.lineWidth = 20;
     this.ctx.beginPath();
     this.ctx.moveTo(this.oldX, this.oldY);
     this.ctx.lineTo(this.x, this.y);
