@@ -15,9 +15,10 @@ class Tetris {
             this.updateScore(score);
         });
 
-        this.colors = [
-            null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
-        ];     
+        this.colors = this.generateRandomPlayerColors();
+        // [
+        //     null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
+        // ];     
 
         this.isStarted = false;
         
@@ -174,6 +175,35 @@ class Tetris {
         } else {
             this.player.name = name;
         }
-    }    
+    }
+
+    generateRandomPlayerColors() {
+        const letters = '0123456789ABCDEF';
+        let colors = [null];
+
+        while(colors.length < 8) {
+            let chars = [];
+
+            while(chars.length < 3) {
+                let color = '';
+                color += letters[Math.floor(Math.random() * letters.length)];
+                color += letters[Math.floor(Math.random() * letters.length)];
+                
+                chars.push(color);
+            }
+
+            const _1 = parseInt(chars[0], 16);
+            const _2 = parseInt(chars[1], 16);
+            const _3 = parseInt(chars[2], 16);
+            const _min = parseInt('30', 16);
+            if(_1 < _min && _2 < _min & _3 < _min) {
+                return this.generateRandomPlayerColors();
+            }
+
+            colors.push( '#' + chars[0] + chars[1] + chars[2]);
+        }
+
+        return colors;
+    }
 
 }
