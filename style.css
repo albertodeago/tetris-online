@@ -128,7 +128,7 @@ body {
 }
 
 .score {
-    height: 50px;
+    height: 1.3em;
 }
 
 .game-over {
@@ -140,7 +140,7 @@ body {
     height: 5px;
     background: red;
     width: 0%;
-    margin: 20px;
+    margin: 2%;
 }
 .debuff-5 {
     animation: debuff-bar 5s infinite linear;
@@ -159,29 +159,32 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 5%;
 }
 .debuff-icon {
     display: none;
-    height: 100px;
-    width: 100px;
+    max-height: 100px;
+    max-width: 100px;
+    height: 100%;
+    width: 100%;
 }
 #debuff-haste {
-    background: url('./images/haste.png') no-repeat center center;
+    background: url('./images/haste.png') no-repeat center center / contain;
 }
 #debuff-keys-inverted {
-    background: url('./images/keys-inverted.png') no-repeat center center;
+    background: url('./images/keys-inverted.png') no-repeat center center / contain;
 }
 #debuff-arena-swing {
-    background: url('./images/arena-swing.png') no-repeat center center;
+    background: url('./images/arena-swing.png') no-repeat center center / contain;
 }
 #debuff-rotating-piece {
-    background: url('./images/rotating-piece.png') no-repeat center center;
+    background: url('./images/rotating-piece.png') no-repeat center center / contain;
 }
 #debuff-arena-mini {
-    background: url('./images/arena-mini.png') no-repeat center center;
+    background: url('./images/arena-mini.png') no-repeat center center / contain;
 }
 #debuff-random-pieces {
-    background: url('./images/random-pieces.png') no-repeat center center;
+    background: url('./images/random-pieces.png') no-repeat center center / contain;
 }
 
 /*********** HELPER CLASSES ****************/
