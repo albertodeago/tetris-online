@@ -949,13 +949,12 @@ class Tetris {
     setPlayerName(name) {
         name = name || 'Unnamed player';    // TODO create random cool names ?
         this.element.querySelector('.name').innerText = name;
-
-        createCookie('player-name', name, 30);
         
         // if the setName function is defined means that the player we are talking about
         // is the local player, so we call the right setName method
         // otherwise is a peer (another player), so we simply set the property
         if(this.player.setName) {
+            createCookie('player-name', name, 30);
             this.player.setName(name);
         } else {
             this.player.name = name;
