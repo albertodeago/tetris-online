@@ -1,4 +1,5 @@
 const tetrisManager = new TetrisManager(document);
+const uxManager = new UXManager();
 
 const localTetris = tetrisManager.createPlayer();
 localTetris.element.classList.add('local');

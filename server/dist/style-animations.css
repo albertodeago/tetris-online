@@ -1,6 +1,6 @@
 @keyframes debuff-bar {
     from { 
-        width: 100%;
+        width: 90%;
     }
     to {
         width: 0%;

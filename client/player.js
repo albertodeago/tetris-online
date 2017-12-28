@@ -211,8 +211,6 @@ class Player {
     applyDebuff(debuff) {
         let debuffType = debuff.debuffType;
         let duration = debuff.duration;
-
-        document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "block";
  
         if(debuffType === 'HASTE') {
             const factor = 2.5;    // 2.5x of speed
@@ -247,15 +245,7 @@ class Player {
             setTimeout( () => { this.randomPieces = false; }, duration);
         }
 
-        // debuff bar
-        var debuffBar = this.tetris.element.querySelector('.debuff-bar');
-        debuffBar.classList.add('debuff-' + duration/1000);
-
-        // timeout to stop the debuff bar
-        setTimeout( () => {
-            debuffBar.classList.remove('debuff-' + duration/1000);
-            document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "none";
-        }, duration);
+        uxManager.applyUXDebuff(debuff, this.tetris.element);
         
     }
 

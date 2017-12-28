@@ -61,12 +61,6 @@ class Tetris {
             row.forEach((value, x) => {
                 if(value !== 0) {
                     let ctx = this.context;
-                    
-                    // "shadow" effect
-                    // ctx.shadowOffsetX = -1.5;
-                    // ctx.shadowOffsetY = -1.5;
-                    // ctx.shadowBlur = 0.5;
-                    // ctx.shadowColor = "white"; //this.colors[value];
 
                     ctx.fillStyle = this.colors[value];
                     ctx.fillRect(x+offset.x, y+offset.y, 1, 1);                
@@ -87,7 +81,7 @@ class Tetris {
         document.getElementById('waiting-game').style.display = "block";
         let waitingLabelEl = document.getElementById('waiting-label');
         waitingLabelEl.classList.add('mdl-color-text--accent');
-        waitingLabelEl.style.fontSize = '35px;';
+        waitingLabelEl.style.fontSize = '35px';
         document.getElementById('start-game-btn').style.display = "none";
 
         // check if it's a single player game

@@ -121,14 +121,14 @@ body {
 
 .tetris {
     border: 0.2em solid #999;
-    height: calc(100% - 100px);
+    height: calc(95% - 100px);  /* 5% room for debuff icons */
 }
 .tetris.small-debuff {
     height: calc(200px);
 }
 
 .score {
-    height: 50px;
+    height: 1.3em;
 }
 
 .game-over {
@@ -140,7 +140,7 @@ body {
     height: 5px;
     background: red;
     width: 0%;
-    margin: 2%;
+    margin: 2% auto;
 }
 .debuff-5 {
     animation: debuff-bar 5s infinite linear;

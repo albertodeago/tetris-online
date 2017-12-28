@@ -8,6 +8,7 @@ const concat = require('gulp-concat');
 var files = [
     './client/tetris-manager.js', 
     './client/connection-manager.js', 
+    './client/ux-manager.js',
     './client/arena.js', 
     './client/events.js', 
     './client/player.js', 

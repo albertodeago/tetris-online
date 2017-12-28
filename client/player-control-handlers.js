@@ -115,7 +115,7 @@ function attachEventListeners() {
         const nSquareY = 20;
         const minSpaceX = deviceX / (nSquareX * 2);
         const minSpaceY = deviceY / (nSquareY * 2);  // space to drop the piece by 1 
-        const dropSpaceY = deviceY / 4;        // space to drop totally the piece
+        const dropSpaceY = deviceY / 5;              // space to drop totally the piece
 
         let firstX = null;
         let firstY = null;

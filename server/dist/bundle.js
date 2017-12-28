@@ -269,21 +269,22 @@ class ConnectionManager {
         } 
         
         else if(data.type === 'apply-debuff') {
-            // var targettedPlayer = null;
+            var targettedPlayer = null;
 
-            // this.tetrisManager.instances.forEach( instance => {
-            //     if(instance.element.id === data.targettedClient)
-            //         targettedPlayer = instance.player;
-            // })
+            this.tetrisManager.instances.forEach( instance => {
+                if(instance.element.id === data.targettedClient)
+                    targettedPlayer = instance.player;
+            })
 
-            // const targettedPeer = this.peers.get(data.targettedClient);
+            const targettedPeer = this.peers.get(data.targettedClient);
 
-            // if(!targettedPeer) {     // no targetted peers, so I am the target
-            //     this.localTetris.player.applyDebuff(data.debuffType);
-            // } else {
-            //     targettedPeer.player.applyDebuff(data.debuffType);
-            // }
-            this.localTetris.player.applyDebuff(data);
+            if(!targettedPeer) {     // no targetted peers, so I am the target
+                this.localTetris.player.applyDebuff(data);
+            } else {
+                // targettedPeer.player.applyDebuff(data);
+                uxManager.applyUXDebuff(data, targettedPeer.element);
+            }
+            // this.localTetris.player.applyDebuff(data);
         }
     }
 
@@ -316,7 +317,7 @@ class ConnectionManager {
     }
 
     debuffForSinglePlayerGame() {
-        const debuffInterval = 40000;
+        const debuffInterval = 35000;
         const debuffs = [
             'HASTE',
             'KEYS-INVERTED',
@@ -338,6 +339,32 @@ class ConnectionManager {
         }, debuffInterval);
     }
     
+}
+class UXManager {
+
+    constructor() {
+
+    }
+
+    applyUXDebuff(debuff, element) {
+        let debuffType = debuff.debuffType;
+        let duration = debuff.duration;
+
+        // debuff icon
+        let debuffIcon = element.querySelector("#debuff-" + debuffType.toLowerCase() );
+        debuffIcon.style.display = "block";
+
+        // debuff bar
+        let debuffBar = element.querySelector('.debuff-bar');
+        debuffBar.classList.add('debuff-' + duration/1000);
+
+        // set the clear of the debuff bar and icon
+        window.setTimeout( () => {
+            debuffIcon.style.display = "none";
+            debuffBar.classList.remove('debuff-' + duration/1000);
+        }, duration);
+    }
+
 }
 /**
  * The arena is the field a player is playing in, basically is a big matrix 
@@ -657,8 +684,6 @@ class Player {
     applyDebuff(debuff) {
         let debuffType = debuff.debuffType;
         let duration = debuff.duration;
-
-        document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "block";
  
         if(debuffType === 'HASTE') {
             const factor = 2.5;    // 2.5x of speed
@@ -693,15 +718,7 @@ class Player {
             setTimeout( () => { this.randomPieces = false; }, duration);
         }
 
-        // debuff bar
-        var debuffBar = this.tetris.element.querySelector('.debuff-bar');
-        debuffBar.classList.add('debuff-' + duration/1000);
-
-        // timeout to stop the debuff bar
-        setTimeout( () => {
-            debuffBar.classList.remove('debuff-' + duration/1000);
-            document.getElementById("debuff-" + debuffType.toLowerCase() ).style.display = "none";
-        }, duration);
+        uxManager.applyUXDebuff(debuff, this.tetris.element);
         
     }
 
@@ -846,12 +863,6 @@ class Tetris {
             row.forEach((value, x) => {
                 if(value !== 0) {
                     let ctx = this.context;
-                    
-                    // "shadow" effect
-                    // ctx.shadowOffsetX = -1.5;
-                    // ctx.shadowOffsetY = -1.5;
-                    // ctx.shadowBlur = 0.5;
-                    // ctx.shadowColor = "white"; //this.colors[value];
 
                     ctx.fillStyle = this.colors[value];
                     ctx.fillRect(x+offset.x, y+offset.y, 1, 1);                
@@ -872,7 +883,7 @@ class Tetris {
         document.getElementById('waiting-game').style.display = "block";
         let waitingLabelEl = document.getElementById('waiting-label');
         waitingLabelEl.classList.add('mdl-color-text--accent');
-        waitingLabelEl.style.fontSize = '35px;';
+        waitingLabelEl.style.fontSize = '35px';
         document.getElementById('start-game-btn').style.display = "none";
 
         // check if it's a single player game
@@ -1109,7 +1120,7 @@ function attachEventListeners() {
         const nSquareY = 20;
         const minSpaceX = deviceX / (nSquareX * 2);
         const minSpaceY = deviceY / (nSquareY * 2);  // space to drop the piece by 1 
-        const dropSpaceY = deviceY / 4;        // space to drop totally the piece
+        const dropSpaceY = deviceY / 5;              // space to drop totally the piece
 
         let firstX = null;
         let firstY = null;
@@ -1186,6 +1197,7 @@ function attachEventListeners() {
     }
 }
 const tetrisManager = new TetrisManager(document);
+const uxManager = new UXManager();
 
 const localTetris = tetrisManager.createPlayer();
 localTetris.element.classList.add('local');

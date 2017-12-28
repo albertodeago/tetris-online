@@ -180,21 +180,22 @@ class ConnectionManager {
         } 
         
         else if(data.type === 'apply-debuff') {
-            // var targettedPlayer = null;
+            var targettedPlayer = null;
 
-            // this.tetrisManager.instances.forEach( instance => {
-            //     if(instance.element.id === data.targettedClient)
-            //         targettedPlayer = instance.player;
-            // })
+            this.tetrisManager.instances.forEach( instance => {
+                if(instance.element.id === data.targettedClient)
+                    targettedPlayer = instance.player;
+            })
 
-            // const targettedPeer = this.peers.get(data.targettedClient);
+            const targettedPeer = this.peers.get(data.targettedClient);
 
-            // if(!targettedPeer) {     // no targetted peers, so I am the target
-            //     this.localTetris.player.applyDebuff(data.debuffType);
-            // } else {
-            //     targettedPeer.player.applyDebuff(data.debuffType);
-            // }
-            this.localTetris.player.applyDebuff(data);
+            if(!targettedPeer) {     // no targetted peers, so I am the target
+                this.localTetris.player.applyDebuff(data);
+            } else {
+                // targettedPeer.player.applyDebuff(data);
+                uxManager.applyUXDebuff(data, targettedPeer.element);
+            }
+            // this.localTetris.player.applyDebuff(data);
         }
     }
 
@@ -227,7 +228,7 @@ class ConnectionManager {
     }
 
     debuffForSinglePlayerGame() {
-        const debuffInterval = 40000;
+        const debuffInterval = 35000;
         const debuffs = [
             'HASTE',
             'KEYS-INVERTED',

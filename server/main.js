@@ -96,15 +96,19 @@ function sendDebuffToRandomClient(sender, msg) {
     }
 }
 
-// function getRandomClientExceptMe(sender) {
-//     const session = sender.session;
-//     const clients = [...session.clients]; 
-//     const possibleClients = clients.filter( (c) => { 
-//         return (c.id !== sender.id && c.state.player.gameOver !== true) 
-//     });
+function getRandomClientExceptMe(sender) {
+    const session = sender.session;
+    const clients = [...session.clients]; 
+    const possibleClients = clients.filter( (c) => { 
+        return (c.id !== sender.id && c.state.player.gameOver !== true) 
+    });
 
-//     return possibleClients[ getRandomInt(0, possibleClients.length) ];
-// }
+    if(possibleClients.length) {
+        return possibleClients[ getRandomInt(0, possibleClients.length) ];
+    } 
+
+    return null;
+}
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -177,18 +181,20 @@ server.on('connection', conn => {
         }
         
         else if(data.type === 'send-debuff') {
-            // var targettedClient = getRandomClientExceptMe(client);
+            var targettedClient = getRandomClientExceptMe(client);
 
-            // console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);
-            const msgToSend = {
-                type: 'apply-debuff',
-                debuffType: data.debuffType,
-                duration: data.duration
-                // targettedClient: targettedClient.id
-            };
-            // client.superBroadcast(msgToSend);
-            sendDebuffToRandomClient(client, msgToSend);
-
+            if(targettedClient) {
+                console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);
+                const msgToSend = {
+                    type: 'apply-debuff',
+                    debuffType: data.debuffType,
+                    duration: data.duration,
+                    targettedClient: targettedClient.id
+                };
+                client.superBroadcast(msgToSend);
+            }
+            
+            // sendDebuffToRandomClient(client, msgToSend);
         }
     })
 
