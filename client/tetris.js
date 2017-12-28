@@ -19,6 +19,26 @@ class Tetris {
         // [
         //     null, 'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'grey'
         // ];     
+        
+        /** particles **/
+        this.particles = [];
+
+        setTimeout( () => {
+            var width = this.canvas.width;
+            var height = this.canvas.height;
+            this.mouse = { x: width * 0.5, y: height * 0.5 };
+
+            for (var i = 0; i < 10; i++) {
+                this.particles[i] = new Particle(Math.random() * width, Math.random() * height, this.context);
+            }
+            this.canvas.addEventListener('mousemove', onMousemove.bind(this));
+        }, 1000);
+
+        function onMousemove(e) {
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
+        }
+        /** end particles **/
 
         this.isStarted = false;
         
@@ -43,6 +63,12 @@ class Tetris {
     draw() {    
         this.context.fillStyle = '#000';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.particles.forEach( (particle) => {
+            particle.attract(this.mouse.x, this.mouse.y);
+            particle.integrate();
+            particle.draw();
+        });
 
         this.drawMatrix(this.arena.matrix, {x: 0, y: 0});
         this.drawMatrix(this.player.matrix, this.player.pos);
@@ -207,3 +233,65 @@ class Tetris {
     }
 
 }
+
+var DAMPING = 0.999;
+
+function Particle(x, y, context) {
+    this.x = this.oldX = x;
+    this.y = this.oldY = y;
+    this.ctx = context;
+}
+
+Particle.prototype.integrate = function() {
+  var velocityX = (this.x - this.oldX) * DAMPING;
+  var velocityY = (this.y - this.oldY) * DAMPING;
+  this.oldX = this.x;
+  this.oldY = this.y;
+  this.x += velocityX;
+  this.y += velocityY;
+};
+
+Particle.prototype.attract = function(x, y) {
+  var dx = x - this.x;
+  var dy = y - this.y;
+  var distance = Math.sqrt(dx * dx + dy * dy);
+  this.x += dx / distance;
+  this.y += dy / distance;
+};
+
+Particle.prototype.draw = function() {
+    this.ctx.strokeStyle = '#ffffff';
+    this.ctx.lineWidth = 2;
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.oldX, this.oldY);
+    this.ctx.lineTo(this.x, this.y);
+    this.ctx.stroke();
+};
+
+// var display = document.getElementById('display');
+// var ctx = display.getContext('2d');
+// var particles = [];
+// var width = display.width;
+// var height = display.height;
+// var mouse = { x: width * 0.5, y: height * 0.5 };
+
+// for (var i = 0; i < 10; i++) {
+//   particles[i] = new Particle(Math.random() * width, Math.random() * height);
+// }
+
+// display.addEventListener('mousemove', onMousemove);
+// function onMousemove(e) {
+//     mouse.x = e.clientX;
+//     mouse.y = e.clientY;
+// }
+// requestAnimationFrame(frame);
+
+// function frame() {
+//     requestAnimationFrame(frame);
+//     // ctx.clearRect(0, 0, width, height);
+//     for (var i = 0; i < particles.length; i++) {
+//         particles[i].attract(mouse.x, mouse.y);
+//         particles[i].integrate();
+//         particles[i].draw();
+//     }
+// }
