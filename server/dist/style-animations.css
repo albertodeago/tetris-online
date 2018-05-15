@@ -8,8 +8,8 @@
 }
 
 .rotate-debuff {
-    -webkit-animation: rotating 2s infinite linear;
-    animation: rotating 2s infinite linear;
+    -webkit-animation: rotating 3s infinite linear;
+    animation: rotating 3s infinite linear;
 }
 @-webkit-keyframes rotating {
     from {

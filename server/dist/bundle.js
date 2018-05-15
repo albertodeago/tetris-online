@@ -479,6 +479,8 @@ class Events {
 class Player {
     constructor(tetris){
         
+        this.ORIGINAL_DROP_SLOW = 700;
+        this.ORIGINAL_DROP_FAST = 35;
         this.DROP_SLOW = 700;
         this.DROP_FAST = 35;
 
@@ -626,13 +628,34 @@ class Player {
         this.events.emit('name', name);
     }
 
+    // /**
+    //  * Change the speed of the player based on the amount of broken rows of this turn.
+    //  */
+    // changeSpeed(brokenRows) {
+    //     this.dropInterval -= (2 * brokenRows);
+    //     this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
+    //     console.log("Speed increased", this.dropInterval);
+    // }
     /**
-     * Change the speed of the player based on the amount of broken rows of this turn.
+     * Change the speed of the player based on the amount of points that other players have.
      */
     changeSpeed(brokenRows) {
-        this.dropInterval -= (2 * brokenRows);
-        this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
-        console.log("Speed increased", this.dropInterval);
+        let points = 0;
+        for(let item of tetrisManager.instances.values()) {
+            if(item.id !== this.tetris.id) {
+                points += item.player.score;
+            }
+        }
+
+        const speedAmount = points / 2; 
+        this.dropInterval = this.ORIGINAL_DROP_SLOW - speedAmount;
+        this.DROP_SLOW = this.ORIGINAL_DROP_SLOW - speedAmount;
+
+        const speedAmountFast = Math.round(points / 100);
+        this.DROP_FAST = this.ORIGINAL_DROP_FAST - speedAmountFast;
+        // this.dropInterval -= (2 * brokenRows);
+        // this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
+        // console.log("Speed increased", this.dropInterval, this.DROP_FAST);
     }
 
     /**
@@ -668,7 +691,7 @@ class Player {
             'ARENA-MINI',
             'RANDOM-PIECES'
         ];
-        const durations = [0, 5000, 11000, 17000, 25000];
+        const durations = [0, 6000, 13000, 21000, 30000];
         const random = getRandomInt(0, debuffs.length);
         let debuff = {
             type: debuffs[random],
@@ -697,12 +720,12 @@ class Player {
             }, duration)
         } else if(debuffType === 'KEYS-INVERTED') {
             this.invertedKeys = true;
-            setTimeout(() => { this.invertedKeys = false }, duration);  // TODO should base on amount of pieces
+            setTimeout(() => { this.invertedKeys = false }, duration);
         } else if(debuffType === 'ARENA-SWING') {
             var el = this.tetris.element.querySelector('.tetris');
-            el.classList.add('swing-debuff');
+            el.classList.add('rotate-debuff');
             setTimeout( () => {
-                el.classList.remove('swing-debuff');
+                el.classList.remove('rotate-debuff');
             }, duration);
         } else if(debuffType === 'ROTATING-PIECE') {
             this.rotatingPieces = true;
