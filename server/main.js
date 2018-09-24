@@ -125,7 +125,7 @@ server.on('connection', conn => {
         const data = JSON.parse(msg);
 
         if(data.type !== 'state-update') {
-            console.log("received ", msg);
+            // console.log("received ", msg);
         }
 
         if(data.type === 'create-session') {
@@ -184,7 +184,7 @@ server.on('connection', conn => {
             var targettedClient = getRandomClientExceptMe(client);
 
             if(targettedClient) {
-                console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);
+                // console.log("sending a debuff from " + client.id + ".. target -> " + targettedClient.id);
                 const msgToSend = {
                     type: 'apply-debuff',
                     debuffType: data.debuffType,
