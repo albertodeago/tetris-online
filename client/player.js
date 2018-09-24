@@ -105,6 +105,8 @@ class Player {
             this.rotate(+1);
 
         this.dropCounter = 0;
+        this.changeSpeed();
+        console.log("speed", this.dropInterval, this.DROP_SLOW);
         if(this.arena.collide(this)) {
             
             // this.dropInterval = this.DROP_SLOW;     // Fix attempt of weird bug // commented because it "removes" HASTE
@@ -118,7 +120,7 @@ class Player {
             
             if(sweepObj.rows > 0) {
                 this.amountOfBrokenRows += sweepObj.rows;
-                this.changeSpeed(sweepObj.rows);            
+                // this.changeSpeed(sweepObj.rows);
             }
 
             if(sweepObj.rows) {
@@ -155,14 +157,6 @@ class Player {
         this.events.emit('name', name);
     }
 
-    // /**
-    //  * Change the speed of the player based on the amount of broken rows of this turn.
-    //  */
-    // changeSpeed(brokenRows) {
-    //     this.dropInterval -= (2 * brokenRows);
-    //     this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
-    //     console.log("Speed increased", this.dropInterval);
-    // }
     /**
      * Change the speed of the player based on the amount of points that other players have.
      */
@@ -173,16 +167,13 @@ class Player {
                 points += item.player.score;
             }
         }
-
+        
         const speedAmount = points / 2; 
         this.dropInterval = this.ORIGINAL_DROP_SLOW - speedAmount;
         this.DROP_SLOW = this.ORIGINAL_DROP_SLOW - speedAmount;
 
         const speedAmountFast = Math.round(points / 100);
         this.DROP_FAST = this.ORIGINAL_DROP_FAST - speedAmountFast;
-        // this.dropInterval -= (2 * brokenRows);
-        // this.DROP_SLOW -= (2 * brokenRows);  // maintain updated the DROP_SLOW constant
-        // console.log("Speed increased", this.dropInterval, this.DROP_FAST);
     }
 
     /**
