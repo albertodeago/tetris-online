@@ -241,9 +241,12 @@ class Player {
             setTimeout(() => { this.invertedKeys = false }, duration);
         } else if(debuffType === 'ARENA-SWING') {
             var el = this.tetris.element.querySelector('.tetris');
+            const emojiContainer = this.tetris.element.querySelector('.emoji-container');
             el.classList.add('rotate-debuff');
+            emojiContainer.classList.add('rotate-debuff');
             setTimeout( () => {
                 el.classList.remove('rotate-debuff');
+                emojiContainer.classList.remove('rotate-debuff');
             }, duration);
         } else if(debuffType === 'ROTATING-PIECE') {
             this.rotatingPieces = true;
@@ -257,9 +260,37 @@ class Player {
         } else if(debuffType === 'RANDOM-PIECES') {
             this.randomPieces = true;
             setTimeout( () => { this.randomPieces = false; }, duration);
+        } else if(debuffType === 'EMOJI') {
+            const rect = this.tetris.canvas.getClientRects()[0];
+            const w = rect.width - rect.x;
+            const h = rect.height - rect.y;
+            const emojiContainer = this.tetris.element.querySelector('.emoji-container');
+            let fun = () => {
+                let el = document.createElement('span');
+                el.innerHTML = `🍆`;
+                el.style.position = `absolute`;
+                el.style.zIndex = 999999;
+                el.style.fontSize = (((Math.random() * 48) | 0) + 9) + `px`;
+                el.style.left = ((Math.random() * (w + 25)) | 0) + (rect.x + 5) + `px`;
+                el.style.top = ((Math.random() * (h + 15)) | 0) + rect.y  + `px`;
+                emojiContainer.appendChild(el);
+            };
+            let durationMap = {
+                "6000": 35, 
+                "13000": 60, 
+                "21000": 85, 
+                "30000": 115
+            };
+            let interval = setInterval(fun, durationMap[duration]);
+            setTimeout(() => { 
+                clearInterval(interval); 
+                while (emojiContainer.firstChild) {
+                    emojiContainer.removeChild(emojiContainer.firstChild);
+                }
+            }, duration);
         }
 
-        uxManager.applyUXDebuff(debuff, this.tetris.element);
+        // uxManager.applyUXDebuff(debuff, this.tetris.element);
         
     }
 

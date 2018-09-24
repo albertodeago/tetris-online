@@ -110,6 +110,14 @@ body {
     height: auto;
 }
 
+.emoji-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 50%;
+    height: calc(95% - 100px);
+}
+
 .local {
     /* flex: 1 0 500px; */
     height: 85%;
