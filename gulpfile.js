@@ -26,34 +26,38 @@ gulp.task('bundle-js', () => { //  TODO minify
 /**
  * Copy styles and assets
  */
-gulp.task('copy-style', function() {
+gulp.task('copy-style', function(cb) {
     gulp.src('./style.css')
         .pipe(gulp.dest('./server/dist/'));
+    cb()
 });
-gulp.task('copy-style-mobile', function() {
+gulp.task('copy-style-mobile', function(cb) {
     gulp.src('./style-mobile.css')
         .pipe(gulp.dest('./server/dist/'));
+    cb()
 });
-gulp.task('copy-style-animations', function() {
+gulp.task('copy-style-animations', function(cb) {
     gulp.src('./style-animations.css')
         .pipe(gulp.dest('./server/dist/'));
+    cb()
 });
-gulp.task('copy-images', function() {
+gulp.task('copy-images', function(cb) {
     gulp.src('./images/*.png')
         .pipe(gulp.dest('./server/dist/images/'));
+    cb()
 });
 
 
 /**
  * Bundle js and copy style
  */
-gulp.task('bundle', (done) => {
+gulp.task('bundle', (cb) => {
     gulp.series(
         'bundle-js',
         'copy-style',
         'copy-style-mobile',
         'copy-style-animations',
         'copy-images'
-    );
-    done()
+    )();
+    cb()
 });
