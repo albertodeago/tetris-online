@@ -1,11 +1,12 @@
 # tetris-online
 
-A multiplayer tetris game playable online via WebSocket with some addings to make the game a bit more funny. Toy project made to learn about websocket and because I always loved tetris.
+A multiplayer Tetris game playable online via WebSocket with some additions to make the game a bit more funny. Toy project made to learn about websocket and because I always loved Tetris.
 
 # Demo
 
-https://multiplayer-tetris-battle.herokuapp.com/index.html
-Copy paste the url (generated dinamically when you enter in the game) to a friend (on in another browser tab) to add a player to the match
+Just open https://tetris-multiplayer.onrender.com/index.html, wait for the URL to change (a
+dinamically generated URL will be created), send the new URL to a friend to add a player to
+the match.
 
 ## Contribute
 
@@ -15,4 +16,4 @@ To install
 To start the dev server
 `npm run start`
 
-NOTE: There is no production build
+NOTE: There is no production build (this project is just for fun)
