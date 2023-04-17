@@ -27,7 +27,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 
 function startGame() {    
     // track game start on analytics
-    panelbear("track", "game_started");
+    cronitor("track", "game_started");
 
     // send a message to other players to start the game
     localTetris.player.events.emit('start-game');
