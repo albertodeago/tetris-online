@@ -2,6 +2,8 @@
 
 A multiplayer Tetris game playable online via WebSocket with some additions to make the game a bit more funny. Toy project made to learn about websocket and because I always loved Tetris.
 
+<a href="https://www.buymeacoffee.com/albertodeago" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 # Demo
 
 Just open https://tetris-multiplayer.onrender.com/index.html, wait for the URL to change (a
